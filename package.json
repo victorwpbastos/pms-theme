@@ -1,0 +1,25 @@
+{
+	"name": "theme",
+	"description": "theme",
+	"organization": "theme",
+	"version": "1.0.0",
+	"private": true,
+	"authors": [
+		"Developer #1 <developer1@mail.com>"
+	],
+	"dependencies": {
+		"bootstrap": "^3.3.7",
+		"vue": "^2",
+		"vue-router": "^2",
+		"vuelidate": "^0.5.0"
+	},
+	"devDependencies": {
+		"babel-eslint": "^8.0.0",
+		"babel-plugin-syntax-dynamic-import": "^6.18.0",
+		"eslint": "^3.19.0",
+		"eslint-loader": "^1.9.0",
+		"eslint-plugin-html": "^3.2.1",
+		"vue-loader": "^13.0.4",
+		"vue-template-compiler": "^2.4.3"
+	}
+}

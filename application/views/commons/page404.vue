@@ -1,0 +1,26 @@
+<template>
+	<div class="wrapper">
+		<img src="../../../assets/img/brasao-lg.png">
+		<br>
+		<br>
+		<h2 class="thin">A página solicitada não foi encontrada</h2>
+		<br>
+		<router-link to="/">Clique aqui para retornar à página inicial</router-link>
+	</div>
+</template>
+
+<style scoped>
+	.wrapper {
+		margin-top: 50px;
+		text-align: center;
+	}
+
+	.wrapper img {
+		filter: opacity(70%);
+	}
+
+	.wrapper a {
+		color: #5bc0de;
+		font-size: 18px;
+	}
+</style>
