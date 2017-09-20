@@ -3,7 +3,7 @@ import BaseModel from 'models/base';
 
 export default class Permisys extends BaseModel {
 	constructor() {
-		super(`${Config.BASE_URL}/permisys`, { usuario: '',	senha: '123', email: '', hash: '', novaSenha: '123' });
+		super(`${Config.BASE_URL}/permisys`, { usuario: '',	senha: '', email: '', hash: '', novaSenha: '' });
 	}
 
 	// validations() {

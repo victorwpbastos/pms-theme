@@ -43,10 +43,18 @@
 		},
 
 		methods: {
-			login() {
+			async login() {
 				this.loading = true;
 
-				this.model.save().then(() => this.loading = false);
+				try {
+					await this.model.save();
+
+					this.$router.push(this.$route.query.redirect || '/');
+				} catch (error) {
+					this.$emit('message', { limit: 0, type: 'danger', text: 'Erro no login.' });
+				} finally {
+					this.loading = false;
+				}
 			}
 		}
 	};

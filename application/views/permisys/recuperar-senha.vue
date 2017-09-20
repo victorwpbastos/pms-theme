@@ -106,7 +106,7 @@
 
 					this.$router.push('/');
 				} catch (error) {
-
+					this.$emit('message', { limit: 0, type: 'danger', text: 'Erro na recuperação de senha.' });
 				} finally {
 					this.loading = false;
 				}
