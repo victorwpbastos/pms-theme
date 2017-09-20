@@ -51,7 +51,7 @@
 
 					this.$router.push(this.$route.query.redirect || '/');
 				} catch (error) {
-					this.$emit('message', { limit: 0, type: 'danger', text: 'Erro no login.' });
+					this.$emit('message', { type: 'danger', text: 'Erro no login.' });
 				} finally {
 					this.loading = false;
 				}
