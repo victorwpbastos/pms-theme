@@ -1,16 +1,17 @@
+import 'babel-polyfill';
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import routes from 'routes';
 import Layout from 'views/commons/layout';
 import initializer from 'initializer';
-import Vuelidate from 'vuelidate';
+// import Vuelidate from 'vuelidate';
 
 Vue.use(VueRouter);
-Vue.use(Vuelidate);
+// Vue.use(Vuelidate);
 
 let router = new VueRouter({ routes, linkActiveClass: 'active' });
 
-initializer();
+initializer(router);
 
 new Vue({
 	el: '#application-container',

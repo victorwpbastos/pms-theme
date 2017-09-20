@@ -2,10 +2,10 @@
 	<header class="flex v-center">
 		<router-link to="/" class="flex v-center">
 			<img class="m-right-10" src="../../../assets/img/brasao.png">
-			<h3 class="thin">THEME</h3>
+			<h3 class="thin">THEME <span style="color:salmon;">{{ $store.config.ENV }}</span></h3>
 		</router-link>
 
-		<v-menu></v-menu>
+		<v-menu v-if="$store.usuario && Object.keys($store.usuario).length > 0"></v-menu>
 	</header>
 </template>
 
@@ -47,11 +47,13 @@
 	header {
 		position: fixed;
 		top: 0;
+		right: 0;
+		left: 0;
 		justify-content: space-between;
-		height: 80px;
+		min-height: 80px;
+		max-height: 80px;
 		padding: 15px;
 		background: #ffffff;
-		width: 100%;
 		z-index: 2;
 	}
 

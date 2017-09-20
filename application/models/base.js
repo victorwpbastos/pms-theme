@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import $ from 'jquery';
 
 export default class Model {
 	constructor(url, attrs) {
@@ -16,34 +17,68 @@ export default class Model {
 		return {};
 	}
 
-	save() {
-		// return new Promise((resolve, reject) => {
+	save(options = {}) {
+		let data = JSON.stringify(this._prepareData());
 
-		// });
-		console.log(this.url, this._prepareData());
-	}
+		options = Object.assign({ data, method: 'POST', contentType: 'application/json; charset=UTF-8' }, options);
 
-	update() {
-
-	}
-
-	remove() {
-
-	}
-
-	static getAll() {
-		// console.log('fetch all');
-	}
-
-	static getById(id) {
-		let instance = new this();
-		let attrs = { id: id, usuario: 'vbastos', senha: '123456' };
-
-		for (let key in attrs) {
-			instance[key] = attrs[key];
+		if (data.id) {
+			return this.update(options);
 		}
 
-		return instance;
+		return this.fetch(this.url, options);
+	}
+
+	update(options = {}) {
+		let data = JSON.stringify(this._prepareData());
+
+		options = Object.assign({ data, method: 'PUT', contentType: 'application/json; charset=UTF-8' }, options);
+
+		if (!data.id) {
+			return this.save(options);
+		}
+
+		return this.fetch(this.url, options);
+	}
+
+	remove(options = {}) {
+		options = Object.assign({ method: 'DELETE' }, options);
+
+		return this.fetch(this.url, options);
+	}
+
+	static findAll(options = {}) {
+		options = Object.assign({ method: 'GET', contentType: 'application/json; charset=UTF-8' }, options);
+
+		return this.fetch(this.url, options);
+	}
+
+	static async find(id, options = {}) {
+		let instance = new this();
+		let url = id ? `${instance.url}/${id}` : `${instance.url}`;
+
+		options = Object.assign({ method: 'GET', contentType: 'application/json; charset=UTF-8' }, options);
+
+		try {
+			let response = await instance.fetch(url, options);
+
+			if (response) {
+				instance._originalAttrs = response;
+
+				for (let key in response) {
+					instance[key] = response[key];
+				}
+
+				return instance;
+			}
+		} catch (error) {
+			console.error(`${this.name} error [${error.statusText}]`, error);
+			throw error;
+		}
+	}
+
+	fetch(url, options = {}) {
+		return $.ajax(url, options);
 	}
 
 	_setupValidations() {

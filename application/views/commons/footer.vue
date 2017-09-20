@@ -19,6 +19,7 @@
 
 <style scoped>
 	footer {
-		height: 60px;
+		min-height: 60px;
+		max-height: 60px;
 	}
 </style>

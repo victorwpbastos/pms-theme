@@ -5,7 +5,17 @@ export default [
 	},
 	{
 		path: '/login',
-		component: () => import('views/permisys/login')
+		component: () => import('views/permisys/login'),
+		meta: {
+			anonymous: true
+		}
+	},
+	{
+		path: '/recuperarsenha',
+		component: () => import('views/permisys/recuperar-senha'),
+		meta: {
+			anonymous: true
+		}
 	},
 	{
 		path: '*',
