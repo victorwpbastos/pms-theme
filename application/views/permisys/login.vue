@@ -8,15 +8,13 @@
 			<h3 class="thin" style="margin-bottom:15px;">Autenticação</h3>
 			<form @submit.prevent="login">
 				<fieldset :disabled="loading">
-					<div style="display:table;width:100%;">
-						<div class="form-group">
-							<label for="usuario" class="control-label">Usuário:</label>
-							<input type="text" class="form-control" id="usuario" v-model="model.usuario">
-						</div>
-						<div class="form-group">
-							<label for="senha" class="control-label">Senha:</label>
-							<input type="text" class="form-control" id="senha" v-model="model.senha">
-						</div>
+					<div class="form-group">
+						<label for="usuario" class="control-label">Usuário:</label>
+						<input type="text" class="form-control" id="usuario" v-model="model.usuario">
+					</div>
+					<div class="form-group">
+						<label for="senha" class="control-label">Senha:</label>
+						<input type="text" class="form-control" id="senha" v-model="model.senha">
 					</div>
 
 					<div class="flex v-center">
@@ -46,10 +44,9 @@
 
 		methods: {
 			login() {
-				// this.loading = true;
+				this.loading = true;
 
-				this.$emit('message', { text: 'Show de Bola', type: 'danger' });
-				// this.model.save().then(this.loading = false);
+				this.model.save().then(() => this.loading = false);
 			}
 		}
 	};
@@ -78,21 +75,5 @@
 	.content {
 		width: 70%;
 		padding: 15px;
-	}
-
-	.content form .form-group {
-		display: table-row;
-	}
-
-	.content form label {
-		display: table-cell;
-		width: 1px;
-		text-align: right;
-		padding-right: 5px;
-	}
-
-	.content form input {
-		display: table-cell;
-		margin-bottom: 15px;
 	}
 </style>

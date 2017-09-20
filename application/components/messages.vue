@@ -1,9 +1,9 @@
 <template>
 	<div class="messages-container">
 		<transition-group name="fade">
-			<div :class="`message alert alert-${m.type}`" v-for="(m, index) in messages" :key="m._id">
+			<div :class="`message alert alert-${m.type}`" v-for="m in messages" :key="m.id">
 				<div v-html="m.text"></div>
-				<button type="button" class="close" @click="closeMessage(index)">&times;</button>
+				<button type="button" class="close" @click="closeMessage(m.id)">&times;</button>
 			</div>
 		</transition-group>
 	</div>
@@ -15,12 +15,22 @@
 
 		watch: {
 			messages() {
-				this.messages.forEach(m => m._id = m._id || new Date().getTime());
+				this.messages.forEach(message => {
+					if (!message._registered) {
+						message._registered = true;
+
+						if (message.limit > 0) {
+							setTimeout(() => this.closeMessage(message.id), message.limit);
+						}
+					}
+				});
 			}
 		},
 
 		methods: {
-			closeMessage(index) {
+			closeMessage(id) {
+				let index = this.messages.findIndex(m => m.id === id);
+
 				this.messages.splice(index, 1);
 			}
 		}

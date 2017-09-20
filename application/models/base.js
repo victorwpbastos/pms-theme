@@ -81,6 +81,16 @@ export default class Model {
 		return $.ajax(url, options);
 	}
 
+	reset() {
+		Object.assign(this, this._originalAttrs);
+	}
+
+	clear() {
+		for (let key in this._originalAttrs) {
+			this[key] = '';
+		}
+	}
+
 	_setupValidations() {
 		let hasValidations = Object.keys(this.validations()).length > 0;
 

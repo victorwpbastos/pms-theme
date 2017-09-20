@@ -28,8 +28,10 @@
 		},
 
 		methods: {
-			messageHandler({ text = '', type = 'success' }) {
-				this.messages.push({ type, text });
+			messageHandler({ text = '', type = 'info', limit = 3000 }) {
+				setTimeout(() => { // para assegurar que o getTime sempre retornará um valor diferente
+					this.messages.push({ id: new Date().getTime(), type, text, limit });
+				}, 0);
 			}
 		}
 	};

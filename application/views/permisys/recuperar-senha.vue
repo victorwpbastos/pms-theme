@@ -6,9 +6,40 @@
 
 		<div class="content flex flex-column h-center">
 			<h3 class="thin" style="margin-bottom:15px;">Recuperação de Senha</h3>
-			<form @submit.prevent="login">
-				<fieldset :disabled="loading">
-					<div style="display:table;width:100%;">
+
+			<!-- nova senha -->
+			<template v-if="alterandoSenha">
+				<form @submit.prevent="alterarSenha">
+					<fieldset :disabled="loading">
+						<div class="form-group">
+							<label for="usuario" class="control-label">Usuário:</label>
+							<input type="text" class="form-control" id="usuario" v-model="model.usuario" disabled>
+						</div>
+						<div class="form-group">
+							<label for="hash" class="control-label">Hash:</label>
+							<input type="text" class="form-control" id="hash" v-model="model.hash" disabled>
+						</div>
+						<div class="form-group">
+							<label for="senha" class="control-label">Nova Senha:</label>
+							<input type="password" class="form-control" id="senha" v-model="model.senha">
+						</div>
+						<div class="form-group">
+							<label for="novaSenha" class="control-label">Repita a Nova Senha:</label>
+							<input type="password" class="form-control" id="novaSenha" v-model="model.novaSenha">
+						</div>
+
+						<button type="submit" class="btn btn-info pull-right">
+							<span class="fa fa-spinner fa-spin" v-if="loading"></span>
+							{{ loading ? 'Processando' : 'Alterar Senha' }}
+						</button>
+					</fieldset>
+				</form>
+			</template>
+
+			<!-- solicitação -->
+			<template v-else>
+				<form @submit.prevent="recuperarSenha">
+					<fieldset :disabled="loading">
 						<div class="form-group">
 							<label for="usuario" class="control-label">Usuário:</label>
 							<input type="text" class="form-control" id="usuario" v-model="model.usuario">
@@ -17,14 +48,14 @@
 							<label for="email" class="control-label">E-mail:</label>
 							<input type="text" class="form-control" id="email" v-model="model.email">
 						</div>
-					</div>
 
-					<button type="submit" class="btn btn-info pull-right">
-						<span class="fa fa-spinner fa-spin" v-if="loading"></span>
-						{{ loading ? 'Processando' : 'Recuperar' }}
-					</button>
-				</fieldset>
-			</form>
+						<button type="submit" class="btn btn-info pull-right">
+							<span class="fa fa-spinner fa-spin" v-if="loading"></span>
+							{{ loading ? 'Processando' : 'Recuperar Senha' }}
+						</button>
+					</fieldset>
+				</form>
+			</template>
 		</div>
 	</div>
 </template>
@@ -41,11 +72,48 @@
 			};
 		},
 
+		computed: {
+			alterandoSenha() {
+				let query = this.$route.query;
+
+				return query.hash !== undefined && query.idUsuario !== undefined;
+			}
+		},
+
+		watch: {
+			'$route': {
+				handler() {
+					let query = this.$route.query;
+
+					this.model.clear();
+
+					this.model.usuario = query.idUsuario;
+					this.model.hash = query.hash;
+				},
+
+				immediate: true
+			}
+		},
+
 		methods: {
-			login() {
+			async recuperarSenha() {
 				this.loading = true;
 
-				this.model.login().then(this.loading = false);
+				try {
+					await this.model.recuperarSenha();
+
+					this.$emit('message', { limit: 0, text: 'Em instantes você receberá um e-mail com as instruções para recuperar a senha.' });
+
+					this.$router.push('/');
+				} catch (error) {
+
+				} finally {
+					this.loading = false;
+				}
+			},
+
+			alterarSenha() {
+				console.log(this.model);
 			}
 		}
 	};
@@ -74,21 +142,5 @@
 	.content {
 		width: 70%;
 		padding: 15px;
-	}
-
-	.content form .form-group {
-		display: table-row;
-	}
-
-	.content form label {
-		display: table-cell;
-		width: 1px;
-		text-align: right;
-		padding-right: 5px;
-	}
-
-	.content form input {
-		display: table-cell;
-		margin-bottom: 15px;
 	}
 </style>
