@@ -5,6 +5,7 @@
 /* layout */
 html, body, #application-container {
 	height: 100%;
+	background: #e7e7e7;
 }
 
 main {
@@ -12,7 +13,7 @@ main {
 	display: flex;
 	flex-direction: column;
 	min-height: calc(100% - 60px);
-	padding: 95px 15px 15px;
+	padding: 85px 15px 15px;
 }
 
 /* general */
@@ -73,6 +74,17 @@ h1, h2, h3, h4 {
 
 .box {
 	padding: 15px;
-	border: solid 1px #f7f7f7;
-	box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+	box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.25);
+	background: #ffffff;
+	border-radius: 3px;
+}
+
+/* panel custom */
+.panel-custom {
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+}
+
+.panel-custom > .panel-footer {
+	background: #ffffff;
+	border: none;
 }

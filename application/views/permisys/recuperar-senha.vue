@@ -124,7 +124,7 @@
 		width: 500px;
 		padding: 0;
 		background: #ffffff;
-		margin: auto;
+		margin: 100px auto;
 	}
 
 	.box .side {

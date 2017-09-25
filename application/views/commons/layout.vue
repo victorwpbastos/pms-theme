@@ -2,11 +2,13 @@
 	<div id="application-container">
 		<v-header></v-header>
 
-		<main class="container">
-			<!-- messages -->
-			<v-messages :messages="messages"></v-messages>
+		<main>
+			<div class="container">
+				<!-- messages -->
+				<v-messages :messages="messages"></v-messages>
 
-			<router-view @message="messageHandler"></router-view>
+				<router-view @message="messageHandler"></router-view>
+			</div>
 		</main>
 
 		<v-footer></v-footer>

@@ -2,10 +2,19 @@
 	<header class="flex v-center">
 		<router-link to="/" class="flex v-center">
 			<img class="m-right-10" src="../../../assets/img/brasao.png">
-			<h3 class="thin">THEME <span style="color:salmon;">{{ $store.config.ENV }}</span></h3>
+			<h4 class="thin">THEME <span style="color:salmon;">{{ $store.config.ENV }}</span></h4>
 		</router-link>
 
-		<v-menu v-if="$store.usuario && Object.keys($store.usuario).length > 0"></v-menu>
+		<template v-if="$store.usuario && Object.keys($store.usuario).length > 0">
+			<v-menu></v-menu>
+
+			<span class="flex v-center m-left-auto">
+				<span class="thin m-right-10" style="font-size:16px;">{{ $store.usuario.nome }}</span>
+				<button type="button" class="btn btn-sm btn-default">
+					<span class="fa fa-sign-out"></span> Sair
+				</button>
+			</span>
+		</template>
 	</header>
 </template>
 
@@ -13,33 +22,7 @@
 	import VMenu from './menu';
 
 	export default {
-		components: { VMenu },
-
-		data() {
-			return {
-				env: Config.ENV
-			};
-		},
-
-		mounted() {
-			this.manageBorder();
-
-			document.addEventListener('scroll', this.manageBorder);
-		},
-
-		beforeDestroy() {
-			document.removeEventListener('scroll', this.manageBorder);
-		},
-
-		methods: {
-			manageBorder() {
-				if (window.scrollY > 0) {
-					this.$el.classList.add('bordered');
-				} else {
-					this.$el.classList.remove('bordered');
-				}
-			}
-		}
+		components: { VMenu }
 	};
 </script>
 
@@ -49,11 +32,11 @@
 		top: 0;
 		right: 0;
 		left: 0;
-		justify-content: space-between;
-		min-height: 80px;
-		max-height: 80px;
+		min-height: 70px;
+		max-height: 70px;
 		padding: 15px;
 		background: #ffffff;
+		box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
 		z-index: 2;
 	}
 
@@ -67,9 +50,5 @@
 
 	header img {
 		filter: opacity(70%);
-	}
-
-	header.bordered {
-		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
 	}
 </style>

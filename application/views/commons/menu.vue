@@ -29,7 +29,7 @@
 	.menu li {
 		display: flex;
 		margin-right: 20px;
-		height: 80px;
+		height: 70px;
 	}
 
 	.menu li:last-of-type {
