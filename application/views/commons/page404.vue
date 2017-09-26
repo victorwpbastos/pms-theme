@@ -9,18 +9,18 @@
 	</div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 	.wrapper {
 		margin-top: 100px;
 		text-align: center;
-	}
 
-	.wrapper img {
-		filter: opacity(70%);
-	}
+		img {
+			filter: opacity(70%);
+		}
 
-	.wrapper a {
-		color: #5bc0de;
-		font-size: 18px;
+		a {
+			color: #5bc0de;
+			font-size: 18px;
+		}
 	}
 </style>

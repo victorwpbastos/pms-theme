@@ -4,6 +4,7 @@ import VueRouter from 'vue-router';
 import routes from 'routes';
 import Layout from 'views/commons/layout';
 import initializer from 'initializer';
+import 'assets/css/main.scss';
 // import Vuelidate from 'vuelidate';
 
 Vue.use(VueRouter);

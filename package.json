@@ -1,18 +1,19 @@
 {
-	"name": "theme",
-	"description": "theme",
-	"organization": "theme",
+	"name": "<%= appName %>",
+	"description": "<%= appName %>",
+	"organization": "Prefeitura de Sorocaba - Seção de Sistemas",
 	"version": "1.0.0",
 	"private": true,
 	"authors": [
-		"Developer #1 <developer1@mail.com>"
+		"Seção de Sistemas <desenvolvimento@sorocaba.sp.gov.br>",
+		"Seção de Sistemas <desenvolvimento@sorocaba.sp.gov.br>"
 	],
 	"dependencies": {
-		"bootstrap": "^3.3.7",
+		"bootstrap-sass": "^3.3.7",
 		"font-awesome": "^4.7.0",
 		"jquery": "^3.2.1",
-		"vue": "^2",
-		"vue-router": "^2"
+		"vue": "^2.4.4",
+		"vue-router": "^2.7.0"
 	},
 	"devDependencies": {
 		"babel-eslint": "^8.0.0",
@@ -20,6 +21,8 @@
 		"eslint": "^3.19.0",
 		"eslint-loader": "^1.9.0",
 		"eslint-plugin-html": "^3.2.1",
+		"node-sass": "^4.5.3",
+		"sass-loader": "^6.0.6",
 		"vue-loader": "^13.0.4",
 		"vue-template-compiler": "^2.4.3"
 	}

@@ -40,7 +40,9 @@ module.exports = require => {
 					loader: 'vue-loader',
 					options: {
 						loaders: {
-							js: 'babel-loader?' + JSON.stringify(babelOptions)
+							js: 'babel-loader?' + JSON.stringify(babelOptions),
+							scss: 'vue-style-loader!css-loader!sass-loader',
+							sass: 'vue-style-loader!css-loader!sass-loader?indentedSyntax'
 						}
 					}
 				},
@@ -50,14 +52,26 @@ module.exports = require => {
 					exclude: /node_modules/
 				},
 				{
+					test: /\.sass$/i,
+					use: [
+						{ loader: 'style-loader' },
+						{ loader: 'css-loader' },
+						{ loader: 'sass-loader?indentedSyntax=sass'	}
+					]
+				},
+				{
+					test: /\.scss$/i,
+					use: [
+						{ loader: 'style-loader' },
+						{ loader: 'css-loader' },
+						{ loader: 'sass-loader'	}
+					]
+				},
+				{
 					test: /\.css$/i,
 					use: [
-						{
-							loader: 'style-loader'
-						},
-						{
-							loader: 'css-loader'
-						}
+						{ loader: 'style-loader' },
+						{ loader: 'css-loader' }
 					]
 				},
 				{
@@ -97,6 +111,7 @@ module.exports = require => {
 				}
 			}),
 			new HtmlWebpackPlugin({
+				title: '<%= appName %>',
 				filename: 'index.html',
 				template: 'index.html',
 				favicon: 'favicon.ico'

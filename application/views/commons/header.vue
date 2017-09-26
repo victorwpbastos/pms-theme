@@ -2,7 +2,7 @@
 	<header class="flex v-center">
 		<router-link to="/" class="flex v-center">
 			<img class="m-right-10" src="../../../assets/img/brasao.png">
-			<h4 class="thin">THEME <span style="color:salmon;">{{ $store.config.ENV }}</span></h4>
+			<h4 class="thin"><%= appName.toUpperCase() %> <span style="color:salmon;">{{ $store.config.ENV }}</span></h4>
 		</router-link>
 
 		<template v-if="$store.usuario && Object.keys($store.usuario).length > 0">
@@ -26,7 +26,7 @@
 	};
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 	header {
 		position: fixed;
 		top: 0;
@@ -38,17 +38,17 @@
 		background: #ffffff;
 		box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
 		z-index: 2;
-	}
 
-	header a,
-	header a:active,
-	header a:focus,
-	header a:hover {
-		text-decoration: none;
-		color: #777;
-	}
+		a,
+		a:active,
+		a:focus,
+		a:hover {
+			text-decoration: none;
+			color: #777;
+		}
 
-	header img {
-		filter: opacity(70%);
+		img {
+			filter: opacity(70%);
+		}
 	}
 </style>

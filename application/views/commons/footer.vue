@@ -1,6 +1,7 @@
 <template>
-	<footer class="flex h-center v-center">
-		{{ organization }}
+	<footer class="flex v-center">
+		<span>{{ organization }}</span>
+		<span>Versão {{ version }}</span>
 	</footer>
 </template>
 
@@ -19,7 +20,9 @@
 
 <style scoped>
 	footer {
+		justify-content: space-between;
 		min-height: 60px;
 		max-height: 60px;
+		padding: 0 15px;
 	}
 </style>

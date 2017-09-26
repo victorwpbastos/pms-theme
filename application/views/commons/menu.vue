@@ -18,39 +18,39 @@
 	</ul>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 	.menu {
 		display: flex;
 		list-style: none;
 		margin: 0 15px;
 		padding: 0;
-	}
 
-	.menu li {
-		display: flex;
-		margin-right: 20px;
-		height: 70px;
-	}
+		li {
+			display: flex;
+			margin-right: 20px;
+			height: 70px;
 
-	.menu li:last-of-type {
-		margin-right: 0;
-	}
+			&:last-of-type {
+				margin-right: 0;
+			}
 
-	.menu li a {
-		display: flex;
-		align-items: center;
-		border-top: solid 2px transparent;
-		border-bottom: solid 2px transparent;
-		text-decoration: none;
-		color: #777777;
-		font-size: 16px;
-		font-weight: 100;
-		transition: all 0.5s;
-	}
+			a {
+				display: flex;
+				align-items: center;
+				border-top: solid 2px transparent;
+				border-bottom: solid 2px transparent;
+				text-decoration: none;
+				color: #777777;
+				font-size: 16px;
+				font-weight: 100;
+				transition: all 0.5s;
 
-	.menu li a:hover,
-	.menu li a.active {
-		border-bottom-color: #5bc0de;
-		color: #5bc0de;
+				&:hover,
+				&.active {
+					border-bottom-color: #5bc0de;
+					color: #5bc0de;
+				}
+			}
+		}
 	}
 </style>

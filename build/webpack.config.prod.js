@@ -43,6 +43,36 @@ module.exports = require => {
 					options: {
 						loaders: {
 							js: 'babel-loader?' + JSON.stringify(babelOptions),
+							sass: ExtractTextPlugin.extract({
+								use: [{
+									loader: 'css-loader',
+									options: {
+										sourceMap: true,
+										minimize: true
+									}
+								}, {
+									loader: 'sass-loader?indentedSyntax=sass',
+									options: {
+										sourceMap: true
+									}
+								}],
+								publicPath: '../'
+							}),
+							scss: ExtractTextPlugin.extract({
+								use: [{
+									loader: 'css-loader',
+									options: {
+										sourceMap: true,
+										minimize: true
+									}
+								}, {
+									loader: 'sass-loader',
+									options: {
+										sourceMap: true
+									}
+								}],
+								publicPath: '../'
+							}),
 							css: ExtractTextPlugin.extract({
 								use: {
 									loader: 'css-loader',
@@ -69,6 +99,42 @@ module.exports = require => {
 					test: /\.js$/i,
 					loader: 'babel-loader?' + JSON.stringify(babelOptions),
 					exclude: /node_modules/
+				},
+				{
+					test: /\.sass$/i,
+					loader: ExtractTextPlugin.extract({
+						use: [{
+							loader: 'css-loader',
+							options: {
+								sourceMap: true,
+								minimize: true
+							}
+						}, {
+							loader: 'sass-loader?indentedSyntax=sass',
+							options: {
+								sourceMap: true
+							}
+						}],
+						publicPath: '../'
+					})
+				},
+				{
+					test: /\.scss$/i,
+					loader: ExtractTextPlugin.extract({
+						use: [{
+							loader: 'css-loader',
+							options: {
+								sourceMap: true,
+								minimize: true
+							}
+						}, {
+							loader: 'sass-loader',
+							options: {
+								sourceMap: true
+							}
+						}],
+						publicPath: '../'
+					})
 				},
 				{
 					test: /\.css$/i,
@@ -122,7 +188,7 @@ module.exports = require => {
 				}
 			}),
 			new webpack.optimize.CommonsChunkPlugin({
-				name: 'manifest',
+				name: 'runtime',
 				minChunks: Infinity
 			}),
 			new webpack.optimize.UglifyJsPlugin({
@@ -142,6 +208,7 @@ module.exports = require => {
 				entryOnly: false
 			}),
 			new HtmlWebpackPlugin({
+				title: '<%= appName %>',
 				filename: 'index.html',
 				template: 'index.html',
 				favicon: 'favicon.ico'

@@ -60,28 +60,28 @@
 	};
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 	.box {
 		width: 500px;
 		padding: 0;
 		background: #ffffff;
 		margin: 100px auto;
-	}
 
-	.box .side {
-		width: 30%;
-		padding: 15px;
-		border-right: solid 1px #f1f1f1;
-		background: #f7f7f7;
-	}
+		.side {
+			width: 30%;
+			padding: 15px;
+			border-right: solid 1px #f1f1f1;
+			background: #f7f7f7;
 
-	.box .side img {
-		filter: opacity(70%);
-		margin-bottom: 5px;
-	}
+			img {
+				filter: opacity(70%);
+				margin-bottom: 5px;
+			}
+		}
 
-	.content {
-		width: 70%;
-		padding: 15px;
+		.content {
+			width: 70%;
+			padding: 15px;
+		}
 	}
 </style>

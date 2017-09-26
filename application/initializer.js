@@ -1,13 +1,13 @@
 import Vue from 'vue';
 import $ from 'jquery';
-import PermisysModel from 'models/permisys';
+// import PermisysModel from 'models/permisys';
 
 export default function(router) {
 	// cria uma fake store
 	Vue.prototype.$store = new Vue({
 		data: {
 			config: window.Config,
-			usuario: null
+			usuario: { nome: 'Chunda Lover' }
 		}
 	});
 
