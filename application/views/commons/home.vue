@@ -8,10 +8,51 @@
 
 			<div class="text-right">
 
-				<v-confirm-button message="Deseja">Salvar</v-confirm-button>
+				<v-confirm-button class="btn-info" message="Deseja mesmo?">Salvar</v-confirm-button>
 			</div>
 
-			<div class="clearfix"></div>
+			<table class="table">
+				<thead>
+					<tr>
+						<th>nome</th>
+						<th>email</th>
+						<th>telefone</th>
+						<th width="1"></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>Nome Sobrenome 1</td>
+						<td>email-1@email.com</td>
+						<td>(15) 9999-9991</td>
+						<td class="text-right" style="white-space:nowrap;">
+							<!-- <a href="">Editar</a> -->
+							<a href="">Editar</a>
+							<v-confirm-button class="btn-link" style="padding:0;border:none;margin:0;">Remover</v-confirm-button>
+						</td>
+					</tr>
+					<tr>
+						<td>Nome Sobrenome 2</td>
+						<td>email-2@email.com</td>
+						<td>(15) 9999-9992</td>
+						<td class="text-right" style="white-space:nowrap;">
+							<!-- <a href="">Editar</a> -->
+							<a href="">Editar</a>
+							<v-confirm-button class="btn-link" style="padding:0;border:none;margin:0;">Remover</v-confirm-button>
+						</td>
+					</tr>
+					<tr>
+						<td>Nome Sobrenome 3</td>
+						<td>email-3@email.com</td>
+						<td>(15) 9999-9993</td>
+						<td class="text-right" style="white-space:nowrap;">
+							<!-- <a href="">Editar</a> -->
+							<a href="">Editar</a>
+							<v-confirm-button class="btn-link" style="padding:0;border:none;margin:0;">Remover</v-confirm-button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
 		</div>
 	</div>
 </template>

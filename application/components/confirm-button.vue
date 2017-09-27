@@ -1,16 +1,16 @@
 <template>
-	<div class="wrapper">
+	<div class="wrapper" ref="wrapper">
 		<div class="overlay" v-if="showPopup"></div>
 
 		<div class="popup" v-if="showPopup">
 			<p v-html="message" style="margin-bottom:15px;"></p>
 			<div class="buttons">
 				<button type="button" class="btn btn-sm btn-default" @click="decline">Não</button>
-				<button type="button" :class="`btn btn-sm btn-${types[type] || 'info'}`" @click="confirm">Sim</button>
+				<button type="button" :class="`btn btn-sm ${type || 'btn-info'}`" @click="confirm">Sim</button>
 			</div>
 		</div>
 
-		<button type="submit" :class="`btn btn-${types[type] || 'info'}`" @click="showPopup = true" :disabled="showPopup">
+		<button type="submit" ref="button" v-bind="$attrs" :class="`btn ${type}`" @click="showPopup = true">
 			<slot></slot>
 		</button>
 	</div>
@@ -19,18 +19,12 @@
 <script>
 	export default {
 		props: {
-			message: { default: 'Confirma?' },
-			type: { default: 'info' }
+			message: { default: 'Confirma?' }
 		},
 
 		data() {
 			return {
-				types: {
-					'info': 'info',
-					'warning': 'warning',
-					'danger': 'danger',
-					'success': 'success'
-				},
+				type: '',
 
 				showPopup: false
 			};
@@ -38,6 +32,9 @@
 
 		created() {
 			document.addEventListener('keyup', this.manageEsc);
+
+			this.manageClasses();
+			this.manageStyles();
 		},
 
 		beforeDestroy() {
@@ -45,6 +42,58 @@
 		},
 
 		methods: {
+			manageClasses() {
+				this.$nextTick(() => {
+					let inheritedClasses = [].slice.call(this.$refs.wrapper.classList);
+
+					this.$refs.wrapper.className = inheritedClasses[0];
+
+					inheritedClasses.shift(); // remove a primeira classe
+
+					if (inheritedClasses.includes('btn-info')) {
+						this.type = 'btn-info';
+					}
+
+					if (inheritedClasses.includes('btn-warning')) {
+						this.type = 'btn-warning';
+					}
+
+					if (inheritedClasses.includes('btn-danger')) {
+						this.type = 'btn-danger';
+					}
+
+					if (inheritedClasses.includes('btn-success')) {
+						this.type = 'btn-success';
+					}
+
+					if (
+						!inheritedClasses.includes('btn-default') &&
+						!inheritedClasses.includes('btn-info') &&
+						!inheritedClasses.includes('btn-warning') &&
+						!inheritedClasses.includes('btn-danger') &&
+						!inheritedClasses.includes('btn-success') &&
+						!inheritedClasses.includes('btn-link')
+					) {
+						this.type = 'btn-info';
+					}
+
+					inheritedClasses.forEach(c => this.$refs.button.classList.add(c));
+				});
+			},
+
+			manageStyles() {
+				this.$nextTick(() => {
+					let inheritedStyles = this.$vnode.data.staticStyle;
+
+					this.$refs.wrapper.removeAttribute('style');
+
+					for (let prop in inheritedStyles) {
+
+						this.$refs.button.style[prop] = inheritedStyles[prop];
+					}
+				});
+			},
+
 			manageEsc(e) {
 				if (e.keyCode === 27) {
 					this.showPopup = false;
