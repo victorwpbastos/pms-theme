@@ -72,6 +72,7 @@
 			padding: 15px;
 			border-right: solid 1px #f1f1f1;
 			background: #f7f7f7;
+			border-radius: 3px 0 0 3px;
 
 			img {
 				filter: opacity(70%);
