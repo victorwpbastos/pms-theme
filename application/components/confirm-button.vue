@@ -114,6 +114,11 @@
 </script>
 
 <style scoped>
+	.wrapper {
+		display: inline-block;
+		position: relative;
+	}
+
 	.overlay {
 		position: fixed;
 		top: 0;
@@ -121,12 +126,7 @@
 		left: 0;
 		right: 0;
 		background: rgba(0, 0, 0, 0.25);
-		z-index: 1;
-	}
-
-	.wrapper {
-		display: inline-block;
-		position: relative;
+		z-index: 100;
 	}
 
 	.popup {
@@ -142,7 +142,7 @@
 		border-radius: 3px;
 		text-align: center;
 		min-width: 200px;
-		z-index: 2;
+		z-index: 200;
 	}
 
 	.popup:after {
@@ -160,5 +160,13 @@
 	.buttons {
 		display: flex;
 		justify-content: space-between;
+	}
+
+	.btn-link {
+		vertical-align: baseline;
+	}
+
+	.btn-link:focus {
+		outline: none;
 	}
 </style>

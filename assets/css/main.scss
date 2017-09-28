@@ -95,6 +95,10 @@ table.table {
 	border-collapse: separate;
 	border-radius: 3px;
 
+	&:last-child {
+		margin-bottom: 0;
+	}
+
 	th, td {
 		padding: 15px !important;
 		vertical-align: middle !important;
@@ -115,7 +119,11 @@ table.table {
 			&:hover {
 				background: #ffffde;
 			}
+		}
+	}
 
+	tbody, tfoot {
+		tr {
 			td {
 				border-top: solid 1px #f1f1f1 !important;
 			}

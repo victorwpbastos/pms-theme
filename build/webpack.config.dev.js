@@ -41,8 +41,8 @@ module.exports = require => {
 					options: {
 						loaders: {
 							js: 'babel-loader?' + JSON.stringify(babelOptions),
-							scss: 'vue-style-loader!css-loader!sass-loader',
-							sass: 'vue-style-loader!css-loader!sass-loader?indentedSyntax'
+							scss: 'vue-style-loader!css-loader!sass-loader?precision=10',
+							sass: 'vue-style-loader!css-loader!sass-loader?indentedSyntax&precision=10'
 						}
 					}
 				},
@@ -56,7 +56,7 @@ module.exports = require => {
 					use: [
 						{ loader: 'style-loader' },
 						{ loader: 'css-loader' },
-						{ loader: 'sass-loader?indentedSyntax=sass'	}
+						{ loader: 'sass-loader?indentedSyntax=sass&precision=10'	}
 					]
 				},
 				{
@@ -64,7 +64,7 @@ module.exports = require => {
 					use: [
 						{ loader: 'style-loader' },
 						{ loader: 'css-loader' },
-						{ loader: 'sass-loader'	}
+						{ loader: 'sass-loader?precision=10'	}
 					]
 				},
 				{
