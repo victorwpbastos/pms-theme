@@ -2,12 +2,12 @@
 	<div class="wrapper" ref="wrapper">
 		<div class="overlay" v-if="showPopup"></div>
 
-		<div class="popup" v-if="showPopup">
-			<p v-html="message" style="margin-bottom:15px;"></p>
-			<div class="buttons">
-				<button type="button" class="btn btn-sm btn-default" @click="decline">Não</button>
+		<div :class="`popup popup-${position}`" v-if="showPopup">
+			<div v-html="message" style="margin-right:15px;"></div>
+			<span class="buttons">
+				<button type="button" class="btn btn-sm btn-default" style="margin-right:5px;" @click="decline">Não</button>
 				<button type="button" :class="`btn btn-sm ${type || 'btn-info'}`" @click="confirm">Sim</button>
-			</div>
+			</span>
 		</div>
 
 		<button type="submit" ref="button" v-bind="$attrs" :class="`btn ${type}`" @click="showPopup = true">
@@ -19,7 +19,8 @@
 <script>
 	export default {
 		props: {
-			message: { default: 'Confirma?' }
+			message: { default: 'Confirma?' },
+			position: { default: 'left' }
 		},
 
 		data() {
@@ -129,39 +130,87 @@
 		z-index: 100;
 	}
 
+	/* popup */
 	.popup {
 		position: absolute;
-		bottom: 45px;
-		left: 50%;
-		transform: translateX(-50%);
-		display: inline-block;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
 		white-space: nowrap;
 		background: #ffffff;
-		padding: 15px;
+		padding: 10px;
 		box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
 		border-radius: 3px;
-		text-align: center;
 		min-width: 200px;
 		z-index: 200;
 	}
 
+	.popup-top {
+		left: 50%;
+		bottom: 100%;
+		transform: translateX(-50%);
+		margin-bottom: 10px;
+	}
+
+	.popup-bottom {
+		left: 50%;
+		top: 100%;
+		transform: translateX(-50%);
+		margin-top: 10px;
+	}
+
+	.popup-left {
+		right: 100%;
+		top: 50%;
+		transform: translateY(-50%);
+		margin-right: 10px;
+	}
+
+	.popup-right {
+		left: 100%;
+		top: 50%;
+		transform: translateY(-50%);
+		margin-left: 10px;
+	}
+
+	/* popup arrow */
 	.popup:after {
 		content: '';
 		width: 10px;
 		height: 10px;
 		position: absolute;
-		bottom: -8px;
-		left: 50%;
-		transform: rotate(45deg) translateX(-50%);
-		box-shadow: 2px 2px 2px -1px rgba(0, 0, 0, 0.25);
 		background: #ffffff;
 	}
 
-	.buttons {
-		display: flex;
-		justify-content: space-between;
+	.popup-top:after {
+		left: 50%;
+		bottom: -5px;
+		transform: translateX(-50%) rotate(45deg);
+		box-shadow: 2px 2px 2px -1px rgba(0, 0, 0, 0.25);
 	}
 
+	.popup-bottom:after {
+		left: 50%;
+		top: -5px;
+		transform: translateX(-50%) rotate(45deg);
+		box-shadow: -2px -2px 2px -1px rgba(0, 0, 0, 0.25);
+	}
+
+	.popup-left:after {
+		right: -5px;
+		top: 50%;
+		transform: translateY(-50%) rotate(-45deg);
+		box-shadow: 2px 2px 2px -1px rgba(0, 0, 0, 0.25);
+	}
+
+	.popup-right:after {
+		left: -5px;
+		top: 50%;
+		transform: translateY(-50%) rotate(-45deg);
+		box-shadow: -2px -2px 2px -1px rgba(0, 0, 0, 0.25);
+	}
+
+	/* btn-link adjustments */
 	.btn-link {
 		vertical-align: baseline;
 	}

@@ -2,8 +2,10 @@
 	<header class="flex v-center">
 		<router-link to="/" class="flex v-center">
 			<img class="m-right-10" src="../../../assets/img/brasao.png">
-			<h4 class="thin"><%= appName.toUpperCase() %> <span style="color:salmon;">{{ $store.config.ENV }}</span></h4>
+			<h4 class="thin"><%= appName.toUpperCase() %></h4>
 		</router-link>
+
+		<span style="background:tomato;color:#ffffff;padding:0 5px;position:absolute;top:0;left:50%;transform:translateX(-50%);">{{ $store.config.ENV }}</span>
 
 		<template v-if="$store.usuario && Object.keys($store.usuario).length > 0">
 			<v-menu></v-menu>

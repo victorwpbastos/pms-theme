@@ -104,9 +104,11 @@ table.table {
 		vertical-align: middle !important;
 	}
 
-	thead {
+	thead, tfoot {
 		background: #f7f7f7;
+	}
 
+	thead {
 		th {
 			text-transform: uppercase;
 			font-weight: 600;
