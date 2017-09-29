@@ -38,7 +38,7 @@
 				<tfoot>
 					<tr>
 						<td colspan="4">
-							<v-paginator class="pull-right" :current-page="27" :page-count="200"></v-paginator>
+							<v-paginator class="pull-right" :page-count="200"></v-paginator>
 						</td>
 					</tr>
 				</tfoot>

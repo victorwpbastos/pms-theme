@@ -48,9 +48,11 @@ export default class Model {
 	}
 
 	static findAll(options = {}) {
+		let instance = new this();
+
 		options = Object.assign({ method: 'GET', contentType: 'application/json; charset=UTF-8' }, options);
 
-		return this.fetch(this.url, options);
+		return instance.fetch(instance.url, options);
 	}
 
 	static async find(id, options = {}) {
@@ -78,7 +80,8 @@ export default class Model {
 	}
 
 	fetch(url, options = {}) {
-		return $.ajax(url, options);
+		options.url = url;
+		return $.ajax(options);
 	}
 
 	reset() {

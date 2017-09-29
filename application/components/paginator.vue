@@ -36,16 +36,14 @@
 		},
 
 		watch: {
-			$route() {
-				let query = this.$route.query;
+			$route: {
+				handler() {
+					let query = this.$route.query;
 
-				this.page = query.page || 1;
-			}
-		},
+					this.page = parseInt(query.page, 10) || 1;
+				},
 
-		created() {
-			if (this.page > 1) {
-				this.paginate(this.page);
+				immediate: true
 			}
 		},
 

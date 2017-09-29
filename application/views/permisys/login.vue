@@ -14,7 +14,7 @@
 					</div>
 					<div class="form-group">
 						<label for="senha" class="control-label">Senha:</label>
-						<input type="text" class="form-control" id="senha" v-model="model.senha">
+						<input type="password" class="form-control" id="senha" v-model="model.senha">
 					</div>
 
 					<div class="flex v-center">
@@ -49,8 +49,10 @@
 				try {
 					await this.model.save();
 
-					this.$router.push(this.$route.query.redirect || '/');
+					this.$emit('success');
+					// this.$router.push(this.$route.query.redirect || '/');
 				} catch (error) {
+					console.log('called error login', error);
 					this.$emit('message', { type: 'danger', text: 'Erro no login.' });
 				} finally {
 					this.loading = false;
