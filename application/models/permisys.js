@@ -15,9 +15,7 @@ export default class Permisys extends BaseModel {
 
 	recuperarSenha() {
 		return new Promise(resolve => {
-			setTimeout(() => {
-				resolve();
-			}, 3000);
+			setTimeout(resolve, 3000);
 		});
 	}
 }
