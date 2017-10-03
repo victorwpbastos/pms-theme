@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import $ from 'jquery';
+import registerFormComponents from 'components/form/register';
 // import PermisysModel from 'models/permisys';
 
 export default function(router) {
@@ -7,17 +8,20 @@ export default function(router) {
 	Vue.prototype.$store = new Vue({
 		data: {
 			config: window.Config,
-			usuario: { nome: 'Chunda Lover' }
+			usuario: null
 		}
 	});
 
+	// registra os components de form
+	registerFormComponents('v');
+
 	// redireciona para o login quando a sessão cair
-	$(document).ajaxError((e, xhr, req) => {
-		if (xhr.status === 401 && req.url !== 'api/permisys') {
-			Vue.prototype.$store.usuario = null;
-			router.push({ path: '/login', query: { redirect: router.currentRoute.fullPath } });
-		}
-	});
+	// $(document).ajaxError((e, xhr, req) => {
+	// 	if (xhr.status === 401 && req.url !== 'api/permisys') {
+	// 		Vue.prototype.$store.usuario = null;
+	// 		router.push({ path: '/login', query: { redirect: router.currentRoute.fullPath } });
+	// 	}
+	// });
 
 	// verifica e protege as rotas
 	// router.beforeEach(async (to, from, next) => {

@@ -3,6 +3,10 @@
 		<div class="box">
 			<h3 class="thin" style="margin-bottom:15px;">Lorem Ipsum</h3>
 
+			<v-group label="Nome" id="chunda" :validation="model.$v.usuario">
+				<v-input v-model="model.usuario"></v-input>
+			</v-group>
+
 			<div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Et voluptas, similique fugit nemo quaerat cum, dolore dignissimos repudiandae rem non neque veniam eveniet odit aut natus ullam amet officia eaque.</div>
 			<div>Quos asperiores sint magnam itaque, vero officiis quam, voluptas sunt quisquam quis labore fugiat. Consequuntur aliquam cupiditate aperiam blanditiis pariatur labore aut rem rerum. Reprehenderit voluptas nesciunt provident, harum vero!</div>
 
@@ -50,8 +54,15 @@
 <script>
 	import VConfirmButton from 'components/confirm-button';
 	import VPaginator from 'components/paginator';
+	import PermisysModel from 'models/permisys';
 
 	export default {
-		components: { VConfirmButton, VPaginator }
+		components: { VConfirmButton, VPaginator },
+
+		data() {
+			return {
+				model: new PermisysModel()
+			};
+		}
 	};
 </script>

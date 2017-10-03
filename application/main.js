@@ -4,11 +4,11 @@ import VueRouter from 'vue-router';
 import routes from 'routes';
 import Layout from 'views/commons/layout';
 import initializer from 'initializer';
+import Vuelidate from 'vuelidate';
 import 'assets/css/main.scss';
-// import Vuelidate from 'vuelidate';
 
 Vue.use(VueRouter);
-// Vue.use(Vuelidate);
+Vue.use(Vuelidate);
 
 let router = new VueRouter({ routes, linkActiveClass: 'active' });
 
