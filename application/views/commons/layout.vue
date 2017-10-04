@@ -3,7 +3,11 @@
 		<v-header></v-header>
 
 		<main>
-			<div class="container">
+			<aside>
+				<v-menu></v-menu>
+			</aside>
+
+			<div style="flex:1;">
 				<!-- messages -->
 				<v-messages :messages="messages"></v-messages>
 
@@ -22,12 +26,13 @@
 <script>
 	import $ from 'jquery';
 	import VHeader from 'views/commons/header';
+	import VMenu from 'views/commons/menu';
 	import VFooter from 'views/commons/footer';
 	import VLogin from 'views/permisys/login';
 	import VMessages from 'components/messages';
 
 	export default {
-		components: { VHeader, VFooter, VLogin, VMessages },
+		components: { VHeader, VMenu, VFooter, VLogin, VMessages },
 
 		data() {
 			return {
@@ -85,7 +90,19 @@
 	};
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+	main {
+		display: flex;
+		padding: 15px;
+		min-height: calc(100% - 130px);
+
+		aside {
+			min-width: 200px;
+			max-width: 200px;
+			margin-right: 15px;
+		}
+	}
+
 	.overlay {
 		position: fixed;
 		top: 0;

@@ -7,14 +7,6 @@ html, body, #application-container {
 	background: #e7e7e7;
 }
 
-main {
-	position: relative;
-	display: flex;
-	flex-direction: column;
-	min-height: calc(100% - 60px);
-	padding: 85px 15px 15px;
-}
-
 // general
 body {
 	font-family: BlinkMacSystemFont, -apple-system, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
