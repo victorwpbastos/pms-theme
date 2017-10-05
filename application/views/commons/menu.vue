@@ -79,8 +79,6 @@
 		.header {
 			display: flex;
 			justify-content: flex-end;
-			background: #f7f7f7;
-			border-radius: 3px 3px 0 0;
 
 			.handle {
 				border-left: none;

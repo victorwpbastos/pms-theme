@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import registerFormComponents from 'components/form/register';
 
-export default function(router) {
+export default function() {
 	// cria uma fake store
 	Vue.prototype.$store = new Vue({
 		data: {
