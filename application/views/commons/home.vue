@@ -11,7 +11,7 @@
 			<div>Quos asperiores sint magnam itaque, vero officiis quam, voluptas sunt quisquam quis labore fugiat. Consequuntur aliquam cupiditate aperiam blanditiis pariatur labore aut rem rerum. Reprehenderit voluptas nesciunt provident, harum vero!</div>
 
 			<div class="text-right" style="margin-bottom:15px;">
-				<v-confirm-button class="btn-info" position="top" message="<strong>Confirma?</strong>">Salvar</v-confirm-button>
+				<v-confirm-button class="btn-info" position="left" message="<strong>Confirma?</strong>">Salvar</v-confirm-button>
 			</div>
 
 			<table class="table">

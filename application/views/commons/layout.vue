@@ -97,7 +97,6 @@
 		min-height: calc(100% - 130px);
 
 		aside {
-			min-width: 200px;
 			max-width: 200px;
 			margin-right: 15px;
 		}

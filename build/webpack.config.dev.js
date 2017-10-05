@@ -20,7 +20,11 @@ module.exports = require => {
 
 	return {
 		entry: {
-			application: [path.resolve(__dirname, '../application/main.js')]
+			application: [
+				'webpack-dev-server/client?{{host}}:{{port}}',
+				'webpack/hot/only-dev-server',
+				path.resolve(__dirname, '../application/main.js')
+			]
 		},
 
 		output: {

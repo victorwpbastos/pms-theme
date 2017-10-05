@@ -1,51 +1,115 @@
 <template>
-	<div class="box">
+	<div class="box" :class="{ 'toggled': toggled }">
+		<div class="header">
+			<a href="#" class="handle" @click.prevent="toggled = !toggled">
+				<span :class="['fa', toggled ? 'fa-angle-right' : 'fa-angle-left']"></span>
+			</a>
+		</div>
+
 		<router-link to="/" exact>
-			<span class="fa fa-home m-right-10"></span> Home
+			<span class="fa fa-home"></span>
+			<span v-if="!toggled" class="m-left-10">Home</span>
 		</router-link>
-		<router-link to="/menu-item-1" exact>
-			<span class="fa fa-angle-right m-right-10"></span> Menu Item 1
+
+		<router-link to="/usuarios" exact>
+			<span class="fa fa-users"></span>
+			<span v-if="!toggled" class="m-left-10">Usuários</span>
 		</router-link>
-		<router-link to="/menu-item-2" exact>
-			<span class="fa fa-angle-right m-right-10"></span> Menu Item 2
+
+		<router-link to="/documentos" exact>
+			<span class="fa fa-files-o"></span>
+			<span v-if="!toggled" class="m-left-10">Documentos</span>
 		</router-link>
-		<router-link to="/menu-item-3" exact>
-			<span class="fa fa-angle-right m-right-10"></span> Menu Item 3
+
+		<router-link to="/items" exact>
+			<span class="fa fa-table"></span>
+			<span v-if="!toggled" class="m-left-10">Items</span>
 		</router-link>
-		<router-link to="/menu-item-4" exact>
-			<span class="fa fa-angle-right m-right-10"></span> Menu Item 4
-		</router-link>
-		<router-link to="/menu-item-5" exact>
-			<span class="fa fa-angle-right m-right-10"></span> Menu Item 5
+
+		<router-link to="/configuracoes" exact>
+			<span class="fa fa-cog"></span>
+			<span v-if="!toggled" class="m-left-10">Configurações</span>
 		</router-link>
 	</div>
 </template>
 
 <script>
 	export default {
+		data() {
+			return {
+				toggled: false
+			};
+		},
 
+		watch: {
+			toggled() {
+				localStorage.setItem('app-menu-toggled', this.toggled);
+			}
+		},
+
+		created() {
+			let value = localStorage.getItem('app-menu-toggled');
+
+			if (value) {
+				this.toggled = JSON.parse(value);
+			}
+		}
 	};
 </script>
 
 <style lang="scss" scoped>
 	.box {
 		padding: 0;
-	}
+		width: 200px;
+		position: relative;
+		transition: all 300ms;
 
-	a {
-		display: flex;
-		align-items: center;
-		border-left: solid 2px transparent;
-		text-decoration: none;
-		color: #777777;
-		font-weight: 100;
-		transition: all 0.5s;
-		padding: 15px;
+		&.toggled {
+			width: 60px;
 
-		&:hover,
-		&.active {
-			border-left-color: #5bc0de;
-			color: #5bc0de;
+			a:not(.handle) {
+				justify-content: center;
+
+				.fa {
+					font-size: 18px;
+				}
+			}
+		}
+
+		.header {
+			display: flex;
+			justify-content: flex-end;
+			background: #f7f7f7;
+			border-radius: 3px 3px 0 0;
+
+			.handle {
+				border-left: none;
+				padding: 10px;
+				height: auto;
+			}
+		}
+
+		a {
+			display: flex;
+			align-items: center;
+			height: 50px;
+			border-left: solid 2px transparent;
+			text-decoration: none;
+			color: #777777;
+			opacity: 0.8;
+			transition: all 300ms;
+			padding: 15px;
+
+			.fa {
+				transition: font-size 300ms;
+				opacity: 0.8;
+			}
+
+			&:hover,
+			&.active {
+				border-left-color: #5bc0de;
+				color: #5bc0de;
+			}
 		}
 	}
 </style>
