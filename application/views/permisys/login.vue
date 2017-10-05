@@ -50,9 +50,7 @@
 					await this.model.save();
 
 					this.$emit('success');
-					// this.$router.push(this.$route.query.redirect || '/');
 				} catch (error) {
-					console.log('called error login', error);
 					this.$emit('message', { type: 'danger', text: 'Erro no login.' });
 				} finally {
 					this.loading = false;

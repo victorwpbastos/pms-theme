@@ -45,7 +45,6 @@
 
 			errorMessage() {
 				for (let v of this._validations) {
-					console.log(v);
 					let errorMessage = extractErrorMessage(v);
 
 					if (errorMessage) {

@@ -124,7 +124,7 @@
 		width: 500px;
 		padding: 0;
 		background: #ffffff;
-		margin: 100px auto;
+		margin: auto;
 
 		.side {
 			width: 30%;
