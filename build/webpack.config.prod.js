@@ -208,7 +208,6 @@ module.exports = require => {
 				entryOnly: false
 			}),
 			new HtmlWebpackPlugin({
-				title: '<%= appName %>',
 				filename: 'index.html',
 				template: 'index.html',
 				favicon: 'favicon.ico'
