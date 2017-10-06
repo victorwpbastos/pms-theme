@@ -15,7 +15,9 @@
 					<v-login @success="retry" @message="messageHandler"></v-login>
 				</div>
 
-				<router-view @message="messageHandler"></router-view>
+				<transition name="fade">
+					<router-view @message="messageHandler"></router-view>
+				</transition>
 			</div>
 		</main>
 
@@ -110,5 +112,16 @@
 		right: 0;
 		background: rgba(0, 0, 0, 0.25);
 		z-index: 100;
+	}
+
+	.fade-enter-active,
+	.fade-leave-active {
+		transition: all 300ms ease-in-out;
+		opacity: 0;
+	}
+
+	.fade-enter,
+	.fade-leave-to {
+		opacity: 0;
 	}
 </style>
