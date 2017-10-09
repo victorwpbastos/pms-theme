@@ -4,7 +4,7 @@
 		:mask="innerMask"
 		v-model="maskedValue"
 		v-bind="$attrs"
-		@input="inputHandler"
+		@input="emitInput"
 	>
 	></v-masked-input>
 </template>
@@ -82,7 +82,7 @@
 				}).join('');
 			},
 
-			inputHandler(value) {
+			emitInput(value) {
 				let rePlaceholderChar = new RegExp(this.placeholderChar, 'g');
 
 				if (!this.emitMasked) {
