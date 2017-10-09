@@ -7,8 +7,33 @@
 				<v-input v-model="model.usuario"></v-input>
 			</v-group>
 
-			<div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Et voluptas, similique fugit nemo quaerat cum, dolore dignissimos repudiandae rem non neque veniam eveniet odit aut natus ullam amet officia eaque.</div>
-			<div>Quos asperiores sint magnam itaque, vero officiis quam, voluptas sunt quisquam quis labore fugiat. Consequuntur aliquam cupiditate aperiam blanditiis pariatur labore aut rem rerum. Reprehenderit voluptas nesciunt provident, harum vero!</div>
+			{{ cpf }}
+			<v-group label="CPF (emitMasked = true)">
+				<v-masked-input
+					mask="\/\/\/ ### ### ##"
+					v-model="cpf"
+				>
+				></v-masked-input>
+			</v-group>
+
+			{{ cpf2 }}
+			<v-group label="CPF (emitMasked = false)">
+				<v-masked-input
+					:mask="[/\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '-', /\d/, /\d/]"
+					v-model="cpf2"
+					:emit-masked="false"
+				>
+				></v-masked-input>
+			</v-group>
+
+			{{ nome }}
+			<v-group label="Nome (emitMasked = true)">
+				<v-masked-input
+					mask="***********************************"
+					v-model="nome"
+				>
+				></v-masked-input>
+			</v-group>
 
 			<div class="text-right" style="margin-bottom:15px;">
 				<v-confirm-button class="btn-info" position="left" message="<strong>Confirma?</strong>">Salvar</v-confirm-button>
@@ -61,7 +86,11 @@
 
 		data() {
 			return {
-				model: new PermisysModel()
+				model: new PermisysModel(),
+
+				cpf: '32106338864',
+				cpf2: '32106338864',
+				nome: 'victor_bastos'
 			};
 		}
 	};

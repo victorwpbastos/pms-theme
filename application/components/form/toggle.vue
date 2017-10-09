@@ -10,11 +10,7 @@
 </template>
 
 <script>
-	import BaseMixin from './base';
-
 	export default {
-		mixins: [BaseMixin],
-
 		props: {
 			value: { default: '' },
 			id: { default() { return `field_${this._uid}`; } },

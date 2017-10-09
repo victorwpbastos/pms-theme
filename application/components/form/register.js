@@ -15,6 +15,6 @@ export default function (prefix) {
 			name = `${name[0].toUpperCase()}${name.substr(1)}`;
 		}
 
-		Vue.component(name, context(c).default);
+		Vue.component(name, context(c).default || context(c));
 	});
 }

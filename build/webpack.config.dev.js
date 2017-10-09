@@ -124,6 +124,7 @@ module.exports = require => {
 			quiet: true,
 			clientLogLevel: 'error',
 			overlay: true,
+			disableHostCheck: true,
 
 			// uncomment the following lines to enable proxy
 

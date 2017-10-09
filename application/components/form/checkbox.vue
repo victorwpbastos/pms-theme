@@ -8,11 +8,7 @@
 </template>
 
 <script>
-	import BaseMixin from './base';
-
 	export default {
-		mixins: [BaseMixin],
-
 		props: {
 			value: { default: '', required() { return Array.isArray(this.modelValue); } },
 			modelValue: { default: '' },
