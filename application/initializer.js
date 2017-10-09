@@ -11,19 +11,19 @@ export default function(router) {
 	});
 
 	// esconde a scrollbar nas transições de views
-	// router.beforeEach((to, from, next) => {
-	// 	document.body.style.overflowY = 'hidden';
+	router.beforeEach((to, from, next) => {
+		document.body.style.overflowY = 'hidden';
 
-	// 	next();
-	// });
+		next();
+	});
 
-	// router.afterEach((to, from, next) => {
-	// 	setTimeout(() => {
-	// 		document.body.style.overflowY = 'auto';
-	// 	}, 300);
+	router.afterEach((to, from, next) => {
+		setTimeout(() => {
+			document.body.style.overflowY = 'auto';
+		}, 300);
 
-	// 	next();
-	// });
+		next();
+	});
 
 	// registra os components de form
 	registerFormComponents('v');

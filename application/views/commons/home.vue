@@ -17,7 +17,7 @@
 			</v-group>
 
 			{{ cpf2 }}
-			<v-group label="CPF (emitMasked = false)">
+			<v-group label="CPF2 (emitMasked = false)">
 				<v-masked-input
 					:mask="[/\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '-', /\d/, /\d/]"
 					v-model="cpf2"
