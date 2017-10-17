@@ -74,7 +74,7 @@ export default class Model {
 				return instance;
 			}
 		} catch (error) {
-			console.error(`${this.name} error [${error.statusText}]`, error);
+			// console.error(`${this.name} error [${error.statusText}]`, error);
 			throw error;
 		}
 	}

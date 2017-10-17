@@ -1,62 +1,54 @@
 <template>
-	<div class="box flex">
-		<div class="side flex h-center v-center">
-			<img src="../../../assets/img/brasao-lg.png">
-		</div>
+	<div class="box">
+		<h3 class="thin" style="margin-bottom:15px;">Recuperação de Senha</h3>
 
-		<div class="content flex flex-column h-center">
-			<h3 class="thin" style="margin-bottom:15px;">Recuperação de Senha</h3>
+		<!-- nova senha -->
+		<template v-if="alterandoSenha">
+			<form @submit.prevent="alterarSenha">
+				<fieldset :disabled="loading">
+					<v-group label="Usuário" :validation="model.$v.usuario">
+						<v-input v-model="model.usuario" disabled></v-input>
+					</v-group>
+					<v-group label="Hash" :validation="model.$v.hash">
+						<v-input v-model="model.hash" disabled></v-input>
+					</v-group>
+					<v-group label="Nova Senha" :validation="model.$v.senha">
+						<v-input v-model="model.senha"></v-input>
+					</v-group>
+					<v-group label="Repita a Nova Senha" :validation="model.$v.novaSenha">
+						<v-input v-model="model.novaSenha"></v-input>
+					</v-group>
 
-			<!-- nova senha -->
-			<template v-if="alterandoSenha">
-				<form @submit.prevent="alterarSenha">
-					<fieldset :disabled="loading">
-						<div class="form-group">
-							<label for="usuario" class="control-label">Usuário:</label>
-							<input type="text" class="form-control" id="usuario" v-model="model.usuario" disabled>
-						</div>
-						<div class="form-group">
-							<label for="hash" class="control-label">Hash:</label>
-							<input type="text" class="form-control" id="hash" v-model="model.hash" disabled>
-						</div>
-						<div class="form-group">
-							<label for="senha" class="control-label">Nova Senha:</label>
-							<input type="password" class="form-control" id="senha" v-model="model.senha">
-						</div>
-						<div class="form-group">
-							<label for="novaSenha" class="control-label">Repita a Nova Senha:</label>
-							<input type="password" class="form-control" id="novaSenha" v-model="model.novaSenha">
-						</div>
+					<button type="submit" class="btn btn-info pull-right">
+						<span class="fa fa-spinner fa-spin" v-if="loading"></span>
+						{{ loading ? 'Processando' : 'Alterar Senha' }}
+					</button>
+				</fieldset>
+			</form>
+		</template>
 
-						<button type="submit" class="btn btn-info pull-right">
-							<span class="fa fa-spinner fa-spin" v-if="loading"></span>
-							{{ loading ? 'Processando' : 'Alterar Senha' }}
-						</button>
-					</fieldset>
-				</form>
-			</template>
+		<!-- solicitação -->
+		<template v-else>
+			<form @submit.prevent="recuperarSenha">
+				<fieldset :disabled="loading">
+					<v-group label="Usuário" :validation="model.$v.usuario">
+						<v-input v-model="model.usuario"></v-input>
+					</v-group>
+					<v-group label="E-mail" :validation="model.$v.email">
+						<v-input v-model="model.email"></v-input>
+					</v-group>
 
-			<!-- solicitação -->
-			<template v-else>
-				<form @submit.prevent="recuperarSenha">
-					<fieldset :disabled="loading">
-						<div class="form-group">
-							<label for="usuario" class="control-label">Usuário:</label>
-							<input type="text" class="form-control" id="usuario" v-model="model.usuario">
-						</div>
-						<div class="form-group">
-							<label for="email" class="control-label">E-mail:</label>
-							<input type="text" class="form-control" id="email" v-model="model.email">
-						</div>
+					<div class="flex v-center">
+						<a href="#" @click.prevent="$router.go(-1)">Cancelar</a>
 
-						<button type="submit" class="btn btn-info pull-right">
+						<button type="submit" class="btn btn-info m-left-auto">
 							<span class="fa fa-spinner fa-spin" v-if="loading"></span>
 							{{ loading ? 'Processando' : 'Recuperar Senha' }}
 						</button>
-					</fieldset>
-				</form>
-			</template>
-		</div>
+					</div>
+				</fieldset>
+			</form>
+		</template>
 	</div>
 </template>
 
@@ -97,51 +89,49 @@
 
 		methods: {
 			async recuperarSenha() {
-				this.loading = true;
+				this.model.$v.$touch();
 
-				try {
-					await this.model.recuperarSenha();
+				if (!this.model.$v.$invalid) {
+					this.loading = true;
 
-					this.$emit('message', { limit: 0, text: 'Em instantes você receberá um e-mail com as instruções para recuperar a senha.' });
+					try {
+						await this.model.recuperarSenha();
 
-					this.$router.push('/');
-				} catch (error) {
-					this.$emit('message', { limit: 0, type: 'danger', text: 'Erro na recuperação de senha.' });
-				} finally {
-					this.loading = false;
+						this.$emit('message', { limit: 10000, text: 'Em instantes você receberá um e-mail com as instruções para recuperar a senha.' });
+					} catch ({ responseJSON }) {
+						this.$emit('message', { text: responseJSON.message, type: 'danger' });
+					} finally {
+						this.loading = false;
+					}
 				}
 			},
 
-			alterarSenha() {
-				// console.log(this.model);
-			}
+			async alterarSenha() {
+				this.model.$v.$touch();
+
+				if (!this.model.$v.$invalid) {
+					this.loading = true;
+
+					try {
+						await this.model.recuperarSenha();
+
+						this.$emit('message', { limit: 10000, text: 'Em instantes você receberá um e-mail com as instruções para recuperar a senha.' });
+					} catch ({ responseJSON }) {
+						this.$emit('message', { text: responseJSON.message, type: 'danger' });
+					} finally {
+						this.loading = false;
+					}
+				}
+			},
 		}
 	};
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 	.box {
 		width: 500px;
-		padding: 0;
+		padding: 15px;
 		background: #ffffff;
 		margin: auto;
-
-		.side {
-			width: 30%;
-			padding: 15px;
-			border-right: solid 1px #f1f1f1;
-			background: #f7f7f7;
-			border-radius: 3px 0 0 3px;
-
-			img {
-				filter: opacity(70%);
-				margin-bottom: 5px;
-			}
-		}
-
-		.content {
-			width: 70%;
-			padding: 15px;
-		}
 	}
 </style>

@@ -6,7 +6,9 @@
 		<span @input="inputHandler">
 			<slot></slot>
 		</span>
-		<span class="help-block" v-if="invalid">{{ errorMessage }}</span>
+		<span class="help-block">
+			<template v-if="invalid">{{ errorMessage }}</template>
+		</span>
 	</div>
 </template>
 
@@ -102,5 +104,12 @@
 	.has-error .form-control:focus,
 	.has-error .form-control:hover {
 		border-color: salmon;
+	}
+
+	.help-block {
+		font-size: 12px;
+		margin-top: 5px;
+		margin-bottom: -15px;
+		height: 20px;
 	}
 </style>

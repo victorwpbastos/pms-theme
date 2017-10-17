@@ -1,9 +1,7 @@
 <template>
-	<div class="box" :class="{ 'toggled': toggled }">
-		<div class="header">
-			<a href="#" class="handle" @click.prevent="toggled = !toggled">
-				<span :class="['fa', toggled ? 'fa-angle-right' : 'fa-angle-left']"></span>
-			</a>
+	<div class="menu" :class="{ 'toggled': toggled }">
+		<div class="handler" @click="toggled = !toggled">
+			<span class="fa fa-bars"></span>
 		</div>
 
 		<router-link to="/" exact>
@@ -58,55 +56,58 @@
 </script>
 
 <style lang="scss" scoped>
-	.box {
-		padding: 0;
-		width: 200px;
+	.menu {
+		padding: 0 15px;
 		position: relative;
-		transition: all 300ms;
+		min-width: 70px;
 
 		&.toggled {
-			width: 60px;
+			width: 70px;
 
 			a:not(.handle) {
 				justify-content: center;
 
 				.fa {
-					font-size: 18px;
+					font-size: 20px;
 				}
 			}
 		}
 
-		.header {
+		.handler {
+			height: 70px;
 			display: flex;
-			justify-content: flex-end;
-
-			.handle {
-				border-left: none;
-				padding: 10px;
-				height: auto;
-			}
+			align-items: center;
+			justify-content: center;
+			color: #ffffff;
+			font-size: 18px;
+			cursor: pointer;
 		}
 
 		a {
 			display: flex;
 			align-items: center;
 			height: 50px;
-			border-left: solid 2px transparent;
 			text-decoration: none;
-			color: #777777;
-			opacity: 0.8;
+			color: darken(#ffffff, 0.5);
 			transition: all 300ms;
-			padding: 15px;
+			padding: 15px 10px;
+			position: relative;
 
 			.fa {
 				transition: font-size 300ms;
-				opacity: 0.8;
 			}
 
 			&:hover,
 			&.active {
-				border-left-color: #5bc0de;
-				color: #5bc0de;
+				color: lighten(#5bc0de, 10);
+			}
+
+			&.active:after {
+				content: '';
+				position: absolute;
+				right: -15px;
+				border: 8px solid transparent;
+				border-right-color: #ffffff;
 			}
 		}
 	}

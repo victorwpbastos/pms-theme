@@ -17,12 +17,10 @@ export default function(router) {
 		next();
 	});
 
-	router.afterEach((to, from, next) => {
+	router.afterEach(() => {
 		setTimeout(() => {
 			document.body.style.overflowY = 'auto';
-		}, 300);
-
-		next();
+		}, 150);
 	});
 
 	// registra os components de form

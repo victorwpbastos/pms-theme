@@ -6,6 +6,13 @@
 
 		<div class="content flex flex-column h-center">
 			<h3 class="thin" style="margin-bottom:15px;">Autenticação</h3>
+
+			<div class="alert alert-danger flex v-start" v-if="loginError">
+				<div>{{ loginError }}</div>
+
+				<button type="button" class="close" @click="loginError = null">&times;</button>
+			</div>
+
 			<form @submit.prevent="login">
 				<fieldset :disabled="loading">
 					<div class="form-group">
@@ -38,22 +45,28 @@
 			return {
 				model: new PermisysModel(),
 
-				loading: false
+				loading: false,
+
+				loginError: null
 			};
 		},
 
 		methods: {
 			async login() {
-				this.loading = true;
+				this.model.$v.$touch();
 
-				try {
-					await this.model.save();
+				if (!this.model.$v.$invalid) {
+					this.loading = true;
 
-					this.$emit('success');
-				} catch (error) {
-					this.$emit('message', { type: 'danger', text: 'Erro no login.' });
-				} finally {
-					this.loading = false;
+					try {
+						let usuario = await this.model.save();
+
+						this.$emit('success', usuario);
+					} catch ({ responseJSON }) {
+						this.loginError = responseJSON.message;
+					} finally {
+						this.loading = false;
+					}
 				}
 			}
 		}

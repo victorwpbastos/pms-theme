@@ -9,7 +9,10 @@ export default class Permisys extends BaseModel {
 	validations() {
 		return {
 			usuario: { required },
-			senha: { required }
+			email: { required },
+			hash: { required },
+			senha: { required },
+			novaSenha: { required }
 		};
 	}
 

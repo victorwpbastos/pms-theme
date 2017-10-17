@@ -1,5 +1,5 @@
 <template>
-	<div class="messages-container">
+	<div class="messages-container" v-if="messages.length > 0">
 		<transition-group name="fade">
 			<div :class="`message alert alert-${m.type}`" v-for="m in messages" :key="m.id">
 				<div v-html="m.text"></div>
@@ -15,6 +15,8 @@
 
 		watch: {
 			messages() {
+				window.scrollTo(0, 0);
+
 				this.messages.forEach(message => {
 					if (!message._registered) {
 						message._registered = true;
@@ -38,6 +40,10 @@
 </script>
 
 <style scoped>
+	.messages-container {
+		padding: 0 15px;
+	}
+
 	.message {
 		display: flex;
 		align-items: center;

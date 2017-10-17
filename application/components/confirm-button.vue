@@ -6,7 +6,7 @@
 			<div v-html="message" style="margin-right:15px;"></div>
 			<span class="buttons">
 				<button type="button" class="btn btn-sm btn-default" style="margin-right:5px;" @click="decline">Não</button>
-				<button type="button" :class="`btn btn-sm ${type || 'btn-info'}`" @click="confirm">Sim</button>
+				<button type="button" :class="`btn btn-sm ${type || 'btn-info'}`" ref="btn-confirm" @click="confirm">Sim</button>
 			</span>
 		</div>
 
@@ -29,6 +29,16 @@
 
 				showPopup: false
 			};
+		},
+
+		watch: {
+			showPopup() {
+				if (this.showPopup) {
+					this.$nextTick(() => {
+						this.$refs['btn-confirm'].focus();
+					});
+				}
+			}
 		},
 
 		created() {

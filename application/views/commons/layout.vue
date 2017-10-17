@@ -1,27 +1,26 @@
 <template>
 	<div id="application-container">
-		<v-header></v-header>
+		<aside>
+			<v-menu></v-menu>
+		</aside>
 
 		<main>
-			<aside>
-				<v-menu></v-menu>
-			</aside>
+			<v-header></v-header>
 
-			<div style="flex:1;">
-				<!-- messages -->
-				<v-messages :messages="messages"></v-messages>
+			<v-messages :messages="messages"></v-messages>
 
-				<div class="overlay" v-if="showLogin">
-					<v-login @success="retry" @message="messageHandler"></v-login>
-				</div>
-
-				<transition name="fade">
-					<router-view @message="messageHandler"></router-view>
-				</transition>
+			<div class="overlay" v-if="showLogin">
+				<v-login @success="handleLoginSuccess"></v-login>
 			</div>
-		</main>
 
-		<v-footer></v-footer>
+			<transition name="fade">
+				<div class="view-container">
+					<router-view @message="messageHandler" v-show="showLogin === false"></router-view>
+				</div>
+			</transition>
+
+			<v-footer></v-footer>
+		</main>
 	</div>
 </template>
 
@@ -32,6 +31,7 @@
 	import VFooter from 'views/commons/footer';
 	import VLogin from 'views/permisys/login';
 	import VMessages from 'components/messages';
+	import PermisysModel from 'models/permisys';
 
 	export default {
 		components: { VHeader, VMenu, VFooter, VLogin, VMessages },
@@ -39,48 +39,80 @@
 		data() {
 			return {
 				messages: [],
-
-				showLogin: false,
-
-				lastRequest: {
-					promise: null,
-					options: null
-				}
+				showLogin: true,
+				lastFailedAjaxRequest: ''
 			};
 		},
 
-		created() {
-			$.ajaxPrefilter((options, originalOptions, jqXHR) => {
-				let dfd = $.Deferred();
+		watch: {
+			'$store.usuario'(value) {
+				this.showLogin = Object.keys(value || {}).length === 0;
+			},
 
-				if (options.resolved) {
+			$route() {
+				let usuario = this.$store.usuario;
+
+				if (this.$route.path === '/recuperarsenha') {
 					this.showLogin = false;
-
-					return;
+				} else if(Object.keys(usuario || {}).length === 0) {
+					this.showLogin = true;
 				}
+			}
+		},
 
-				jqXHR.done(dfd.resolve);
-
-				jqXHR.fail(() => {
-					if (jqXHR.status === 401) {
-						Object.assign(originalOptions, { resolved: true });
-
-						this.lastRequest = { promise: dfd, options: originalOptions };
-
-						this.showLogin = true;
-					} else {
-						dfd.reject(jqXHR);
-					}
-				});
-
-				return dfd.promise(jqXHR);
-			});
+		created() {
+			this.setupAjaxFilter();
+			this.injectLoggedUserInStore();
 		},
 
 		methods: {
-			retry() {
-				$.ajax(this.lastRequest.options)
-					.then(this.lastRequest.promise.resolve, this.lastRequest.promise.reject);
+			async injectLoggedUserInStore() {
+				let usuario = this.$store.usuario;
+
+				if (!usuario) {
+					this.$store.usuario = await PermisysModel.find().catch(() => {});
+				}
+			},
+
+			setupAjaxFilter() {
+				$.ajaxPrefilter((options, originalOptions, jqXHR) => {
+					let dfd = $.Deferred();
+
+					if (options.resolved) {
+						return;
+					}
+
+					jqXHR.done(dfd.resolve);
+
+					jqXHR.fail(() => {
+						if (jqXHR.status === 401) {
+							Object.assign(originalOptions, { resolved: true });
+
+							this.$store.usuario = null;
+							this.showLogin = true;
+
+							if (options.type === 'GET' && options.url !== 'api/permisys') {
+								this.lastFailedAjaxRequest = { promise: dfd, options: originalOptions };
+							} else {
+								dfd.resolve();
+							}
+						} else {
+							dfd.reject(jqXHR);
+						}
+					});
+
+					return dfd.promise(jqXHR);
+				});
+			},
+
+			handleLoginSuccess(usuario) {
+				this.$store.usuario = usuario;
+
+				if (this.lastFailedAjaxRequest) {
+					$.ajax(this.lastFailedAjaxRequest.options)
+						.then(this.lastFailedAjaxRequest.promise.resolve)
+						.catch(this.lastFailedAjaxRequest.promise.reject);
+				}
 			},
 
 			messageHandler({ text = '', type = 'info', limit = 5000 }) {
@@ -93,30 +125,30 @@
 </script>
 
 <style lang="scss" scoped>
-	main {
+	#application-container {
 		display: flex;
-		padding: 15px;
-		min-height: calc(100% - 130px);
-
-		aside {
-			max-width: 200px;
-			margin-right: 15px;
-		}
+		min-height: 100vh;
 	}
 
-	.overlay {
-		position: fixed;
-		top: 0;
-		bottom: 0;
-		left: 0;
-		right: 0;
-		background: rgba(0, 0, 0, 0.25);
-		z-index: 100;
+	aside {
+		background: #286b86;
+	}
+
+	main {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+
+		.view-container {
+			flex: 1;
+			padding: 15px;
+		}
 	}
 
 	.fade-enter-active,
 	.fade-leave-active {
-		transition: all 300ms ease-in-out;
+		transition: all 150ms ease-in-out;
 		opacity: 0;
 	}
 
