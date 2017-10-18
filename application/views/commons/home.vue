@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="box">
 		<h3 class="thin" style="margin-bottom:15px;">Lorem Ipsum</h3>
 
 		<v-group label="Nome" id="chunda" :validation="model.$v.usuario">

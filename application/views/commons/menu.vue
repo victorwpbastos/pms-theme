@@ -41,12 +41,14 @@
 
 		watch: {
 			toggled() {
-				localStorage.setItem('app-menu-toggled', this.toggled);
+				let appName = '<%= appName.toUpperCase() %>'.replace(/\s/g, '_');
+				localStorage.setItem(`${appName}-menu-toggled`, this.toggled);
 			}
 		},
 
 		created() {
-			let value = localStorage.getItem('app-menu-toggled');
+			let appName = '<%= appName.toUpperCase() %>'.replace(/\s/g, '_');
+			let value = localStorage.getItem(`${appName}-menu-toggled`);
 
 			if (value) {
 				this.toggled = JSON.parse(value);
@@ -106,8 +108,8 @@
 				content: '';
 				position: absolute;
 				right: -15px;
-				border: 8px solid transparent;
-				border-right-color: #ffffff;
+				border: 6px solid transparent;
+				border-right-color: #e7e7e7;
 			}
 		}
 	}

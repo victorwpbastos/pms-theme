@@ -1,26 +1,26 @@
 <template>
-	<div id="application-container">
-		<aside>
+	<div id="application-container" class="flex">
+		<div class="sidebar">
 			<v-menu></v-menu>
-		</aside>
+		</div>
 
-		<main>
+		<div class="content flex flex-column">
 			<v-header></v-header>
 
-			<v-messages :messages="messages"></v-messages>
+			<main class="flex flex-column">
+				<v-messages :messages="messages"></v-messages>
 
-			<div class="overlay" v-if="showLogin">
-				<v-login @success="handleLoginSuccess"></v-login>
-			</div>
-
-			<transition name="fade">
-				<div class="view-container">
-					<router-view @message="messageHandler" v-show="showLogin === false"></router-view>
+				<div class="overlay" v-if="showLogin">
+					<v-login @success="handleLoginSuccess"></v-login>
 				</div>
-			</transition>
 
-			<v-footer></v-footer>
-		</main>
+				<transition name="fade">
+					<router-view @message="messageHandler" v-show="showLogin === false"></router-view>
+				</transition>
+
+				<v-footer></v-footer>
+			</main>
+		</div>
 	</div>
 </template>
 
@@ -39,7 +39,7 @@
 		data() {
 			return {
 				messages: [],
-				showLogin: true,
+				showLogin: false,
 				lastFailedAjaxRequest: ''
 			};
 		},
@@ -125,24 +125,20 @@
 </script>
 
 <style lang="scss" scoped>
-	#application-container {
-		display: flex;
-		min-height: 100vh;
-	}
-
-	aside {
+	.sidebar {
 		background: #286b86;
 	}
 
-	main {
+	.content {
 		flex: 1;
-		display: flex;
-		flex-direction: column;
 		justify-content: space-between;
 
-		.view-container {
+		main {
 			flex: 1;
-			padding: 15px;
+			justify-content: space-between;
+			height: calc(100vh - 70px);
+			overflow-y: scroll;
+			padding: 15px 15px 0;
 		}
 	}
 

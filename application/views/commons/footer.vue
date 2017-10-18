@@ -21,6 +21,7 @@
 <style scoped>
 	footer {
 		justify-content: space-between;
-		padding: 15px;
+		min-height: 50px;
+		max-height: 50px;
 	}
 </style>

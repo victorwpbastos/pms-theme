@@ -60,6 +60,9 @@
 		min-height: 70px;
 		max-height: 70px;
 		padding: 15px;
+		background: #ffffff;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+        z-index: 100;
 
 		a,
 		a:active,
