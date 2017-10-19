@@ -132,6 +132,6 @@
 		width: 500px;
 		padding: 15px;
 		background: #ffffff;
-		margin: auto;
+		margin: 0 auto;
 	}
 </style>

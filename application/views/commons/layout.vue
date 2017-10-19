@@ -1,26 +1,34 @@
 <template>
 	<div id="application-container" class="flex">
-		<div class="sidebar">
-			<v-menu></v-menu>
-		</div>
+		<template v-if="loading">
+			<div style="margin:auto;">
+				<span class="fa fa-cog fa-spin"></span> Inicializando aplicação
+			</div>
+		</template>
 
-		<div class="content flex flex-column">
-			<v-header></v-header>
+		<template v-else>
+			<div class="sidebar">
+				<v-menu></v-menu>
+			</div>
 
-			<main class="flex flex-column">
-				<v-messages :messages="messages"></v-messages>
+			<div class="content flex flex-column">
+				<v-header></v-header>
 
-				<div class="overlay" v-if="showLogin">
-					<v-login @success="handleLoginSuccess"></v-login>
-				</div>
+				<main class="flex flex-column">
+					<v-messages :messages="messages"></v-messages>
 
-				<transition name="fade">
-					<router-view @message="messageHandler" v-show="showLogin === false"></router-view>
-				</transition>
+					<div class="overlay" v-if="showLogin">
+						<v-login @success="handleLoginSuccess"></v-login>
+					</div>
 
-				<v-footer></v-footer>
-			</main>
-		</div>
+					<transition name="fade">
+						<router-view @message="messageHandler" v-show="showLogin === false"></router-view>
+					</transition>
+
+					<v-footer style="margin-top:auto;"></v-footer>
+				</main>
+			</div>
+		</template>
 	</div>
 </template>
 
@@ -40,40 +48,42 @@
 			return {
 				messages: [],
 				showLogin: false,
-				lastFailedAjaxRequest: ''
+				lastFailedAjaxRequest: '',
+				loading: true
 			};
 		},
 
 		watch: {
 			'$store.usuario'(value) {
-				this.showLogin = Object.keys(value || {}).length === 0;
+				if (value !== undefined) {
+					this.showLogin = Object.keys(value || {}).length === 0;
+				}
 			},
 
-			$route() {
-				let usuario = this.$store.usuario;
-
+			async $route() {
 				if (this.$route.path === '/recuperarsenha') {
 					this.showLogin = false;
-				} else if(Object.keys(usuario || {}).length === 0) {
-					this.showLogin = true;
 				}
 			}
 		},
 
-		created() {
+		async created() {
+			let timeout = setTimeout(() => {
+				this.loading = true;
+			}, 1000);
+
+			try {
+				this.$store.usuario = await PermisysModel.find().catch(() => {});
+			} finally {
+				clearTimeout(timeout);
+
+				this.loading = false;
+			}
+
 			this.setupAjaxFilter();
-			this.injectLoggedUserInStore();
 		},
 
 		methods: {
-			async injectLoggedUserInStore() {
-				let usuario = this.$store.usuario;
-
-				if (!usuario) {
-					this.$store.usuario = await PermisysModel.find().catch(() => {});
-				}
-			},
-
 			setupAjaxFilter() {
 				$.ajaxPrefilter((options, originalOptions, jqXHR) => {
 					let dfd = $.Deferred();
@@ -115,10 +125,8 @@
 				}
 			},
 
-			messageHandler({ text = '', type = 'info', limit = 5000 }) {
-				setTimeout(() => { // para assegurar que o getTime sempre retornará um valor diferente
-					this.messages.push({ id: new Date().getTime(), type, text, limit });
-				}, 0);
+			messageHandler({ text = '', type = 'info', limit = 0 }) {
+				this.messages.push({ text, type, limit });
 			}
 		}
 	};
@@ -135,7 +143,6 @@
 
 		main {
 			flex: 1;
-			justify-content: space-between;
 			height: calc(100vh - 70px);
 			overflow-y: scroll;
 			padding: 15px 15px 0;

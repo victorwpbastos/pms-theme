@@ -10,7 +10,7 @@
 			<div class="alert alert-danger flex v-start" v-if="loginError">
 				<div>{{ loginError }}</div>
 
-				<button type="button" class="close" @click="loginError = null">&times;</button>
+				<button type="button" class="close m-left-auto" @click="loginError = null">&times;</button>
 			</div>
 
 			<form @submit.prevent="login">
@@ -78,7 +78,7 @@
 		width: 500px;
 		padding: 0;
 		background: #ffffff;
-		margin: 100px auto;
+		margin: 200px auto;
 
 		.side {
 			width: 30%;
