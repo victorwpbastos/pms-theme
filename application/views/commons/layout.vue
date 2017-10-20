@@ -68,22 +68,31 @@
 		},
 
 		async created() {
-			let timeout = setTimeout(() => {
-				this.loading = true;
-			}, 1000);
-
-			try {
-				this.$store.usuario = await PermisysModel.find().catch(() => {});
-			} finally {
-				clearTimeout(timeout);
-
-				this.loading = false;
-			}
-
-			this.setupAjaxFilter();
+			window.permisys = new PermisysModel();
+			await this.getUsuarioLogado();
+			await this.setupAjaxFilter();
 		},
 
 		methods: {
+			async getUsuarioLogado() {
+				let timeout = setTimeout(() => {
+					this.loading = true;
+				}, 1000);
+
+				try {
+					this.$store.usuario = await PermisysModel.find();
+				} catch ({ status }) {
+					if (status === 401) {
+						this.$store.usuario = null;
+						this.showLogin = true;
+					}
+				} finally {
+					clearTimeout(timeout);
+
+					this.loading = false;
+				}
+			},
+
 			setupAjaxFilter() {
 				$.ajaxPrefilter((options, originalOptions, jqXHR) => {
 					let dfd = $.Deferred();
@@ -101,10 +110,8 @@
 							this.$store.usuario = null;
 							this.showLogin = true;
 
-							if (options.type === 'GET' && options.url !== 'api/permisys') {
+							if (options.type === 'GET') {
 								this.lastFailedAjaxRequest = { promise: dfd, options: originalOptions };
-							} else {
-								dfd.resolve();
 							}
 						} else {
 							dfd.reject(jqXHR);
