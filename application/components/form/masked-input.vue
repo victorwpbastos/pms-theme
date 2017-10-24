@@ -10,7 +10,7 @@
 </template>
 
 <script>
-	import VMaskedInput from 'vue-text-mask';
+	import VMaskedInput, { conformToMask } from 'vue-text-mask';
 
 	export default {
 		components: { VMaskedInput },
@@ -37,6 +37,15 @@
 					'*': /./
 				}
 			};
+		},
+
+		watch: {
+			value(value) {
+				if (value) {
+					this.maskedValue = conformToMask(value, this.innerMask, this.$attrs).conformedValue;
+					this.emitInput(this.maskedValue);
+				}
+			}
 		},
 
 		created() {
