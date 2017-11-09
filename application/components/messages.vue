@@ -3,7 +3,6 @@
 		<transition-group name="fade">
 			<div :class="`message alert alert-${m.type}`" v-for="m in messages" :key="m._id">
 				<div v-html="m.text"></div>
-				<span>{{ m._id }}</span>
 				<button type="button" class="close" @click="closeMessage(m._id)">&times;</button>
 			</div>
 		</transition-group>
@@ -28,6 +27,8 @@
 					if (!message._registered) {
 						this.counter++;
 
+						message.type = message.type !== undefined ? message.type : 'info';
+						message.limit = message.limit !== undefined ? message.limit : 0;
 						message._registered = true;
 						message._id = this.counter;
 
