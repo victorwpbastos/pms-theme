@@ -22,7 +22,7 @@
 					</div>
 
 					<transition name="fade">
-						<router-view @message="messageHandler" v-show="showLogin === false"></router-view>
+						<router-view v-show="showLogin === false"></router-view>
 					</transition>
 
 					<v-footer style="margin-top:auto;"></v-footer>
@@ -46,7 +46,6 @@
 
 		data() {
 			return {
-				messages: [],
 				showLogin: false,
 				lastFailedAjaxRequest: '',
 				loading: true
@@ -68,9 +67,8 @@
 		},
 
 		async created() {
-			window.permisys = new PermisysModel();
-			await this.getUsuarioLogado();
 			await this.setupAjaxFilter();
+			await this.getUsuarioLogado();
 		},
 
 		methods: {
@@ -97,21 +95,18 @@
 				$.ajaxPrefilter((options, originalOptions, jqXHR) => {
 					let dfd = $.Deferred();
 
-					if (options.resolved) {
-						return;
-					}
-
 					jqXHR.done(dfd.resolve);
 
 					jqXHR.fail(() => {
 						if (jqXHR.status === 401) {
-							Object.assign(originalOptions, { resolved: true });
-
-							this.$store.usuario = null;
-							this.showLogin = true;
+							if (options.url === 'api/permisys') {
+								dfd.reject(jqXHR);
+							}
 
 							if (options.type === 'GET') {
 								this.lastFailedAjaxRequest = { promise: dfd, options: originalOptions };
+							} else {
+								this.lastFailedAjaxRequest = '';
 							}
 						} else {
 							dfd.reject(jqXHR);
@@ -126,14 +121,10 @@
 				this.$store.usuario = usuario;
 
 				if (this.lastFailedAjaxRequest) {
-					$.ajax(this.lastFailedAjaxRequest.options)
-						.then(this.lastFailedAjaxRequest.promise.resolve)
-						.catch(this.lastFailedAjaxRequest.promise.reject);
-				}
-			},
+					let { options, promise } = this.lastFailedAjaxRequest;
 
-			messageHandler({ text = '', type = 'info', limit = 0 }) {
-				this.messages.push({ text, type, limit });
+					$.ajax(options).then(promise.resolve, promise.reject);
+				}
 			}
 		}
 	};

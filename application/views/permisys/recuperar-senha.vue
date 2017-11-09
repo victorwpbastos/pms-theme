@@ -97,9 +97,9 @@
 					try {
 						await this.model.recuperarSenha();
 
-						this.$emit('message', { limit: 10000, text: 'Em instantes você receberá um e-mail com as instruções para recuperar a senha.' });
+						this.$store.messages.push({ limit: 10000, text: 'Em instantes você receberá um e-mail com as instruções para recuperar a senha.' });
 					} catch ({ responseJSON }) {
-						this.$emit('message', { text: responseJSON.message, type: 'danger' });
+						this.$store.messages.push({ text: responseJSON.message, type: 'danger' });
 					} finally {
 						this.loading = false;
 					}
@@ -115,9 +115,9 @@
 					try {
 						await this.model.recuperarSenha();
 
-						this.$emit('message', { limit: 10000, text: 'Em instantes você receberá um e-mail com as instruções para recuperar a senha.' });
+						this.$store.messages.push({ limit: 10000, text: 'Em instantes você receberá um e-mail com as instruções para recuperar a senha.' });
 					} catch ({ responseJSON }) {
-						this.$emit('message', { text: responseJSON.message, type: 'danger' });
+						this.$store.messages.push({ text: responseJSON.message, type: 'danger' });
 					} finally {
 						this.loading = false;
 					}

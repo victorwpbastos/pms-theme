@@ -20,9 +20,9 @@ export default class Model {
 	save(options = {}) {
 		let data = JSON.stringify(this._prepareData());
 
-		options = Object.assign({ data, method: 'POST', contentType: 'application/json; charset=UTF-8' }, options);
+		options = Object.assign({ data, contentType: 'application/json; charset=UTF-8' }, options, { method: 'POST' });
 
-		if (data.id) {
+		if (this.id) {
 			return this.update(options);
 		}
 
@@ -32,9 +32,9 @@ export default class Model {
 	update(options = {}) {
 		let data = JSON.stringify(this._prepareData());
 
-		options = Object.assign({ data, method: 'PUT', contentType: 'application/json; charset=UTF-8' }, options);
+		options = Object.assign({ data, contentType: 'application/json; charset=UTF-8' }, options, { method: 'PUT' });
 
-		if (!data.id) {
+		if (!this.id) {
 			return this.save(options);
 		}
 
@@ -42,7 +42,7 @@ export default class Model {
 	}
 
 	remove(options = {}) {
-		options = Object.assign({ method: 'DELETE' }, options);
+		options = Object.assign(options, { method: 'DELETE' });
 
 		return this.fetch(this.url, options);
 	}

@@ -6,6 +6,7 @@ export default function() {
 	Vue.prototype.$store = new Vue({
 		data: {
 			config: window.Config,
+			messages: [],
 			usuario: null
 		}
 	});

@@ -2,6 +2,7 @@
 	<select
 		class="form-control"
 		@change="emitChange"
+		v-model="model"
 	>
 		<slot></slot>
 	</select>
@@ -10,49 +11,28 @@
 <script>
 	export default {
 		props: {
-			value: { default: null }
+			value: { default: '' }
 		},
 
-		mounted() {
-			this.setInitialValue();
+		data() {
+			return {
+				model: ''
+			};
 		},
 
-		updated() {
-			this.setInitialValue();
+		watch: {
+			value(value) {
+				this.model = value;
+			}
+		},
+
+		created() {
+			this.model = this.value;
 		},
 
 		methods: {
-			emitChange(e) {
-				let selectedOptions = [].slice.call(e.target.options).filter(o => o.selected === true);
-				let values = selectedOptions.map(option => {
-					return option._value !== undefined ? option._value : option.value;
-				});
-
-				if (e.target.multiple) {
-					this.$emit('input', values);
-				} else {
-					this.$emit('input', values[0]);
-				}
-			},
-
-			setInitialValue() {
-				if (this.value && this.value.length > 0) {
-					let options = [].slice.call(this.$el.options);
-
-					options.forEach(option => {
-						option.selected = false;
-
-						if (this.$el.multiple) {
-							let values = this.value.map(v => v.toString());
-
-							option.selected = values.includes(JSON.stringify(option._value));
-						} else {
-							if (JSON.stringify(option._value) === JSON.stringify(this.value)) {
-								option.selected = true;
-							}
-						}
-					});
-				}
+			emitChange() {
+				this.$emit('input', this.model);
 			}
 		}
 	};
