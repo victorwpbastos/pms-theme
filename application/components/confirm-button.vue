@@ -6,11 +6,11 @@
 			<div v-html="message" style="margin-right:15px;"></div>
 			<span class="buttons">
 				<button type="button" class="btn btn-sm btn-default" style="margin-right:5px;" @click="decline">Não</button>
-				<button type="button" :class="`btn btn-sm ${type || 'btn-info'}`" ref="btn-confirm" @click="confirm">Sim</button>
+				<button type="button" :class="`btn btn-sm ${btnClass || 'btn-info'}`" ref="btn-confirm" @click="confirm">Sim</button>
 			</span>
 		</div>
 
-		<button type="submit" ref="button" v-bind="$attrs" :class="`btn ${type}`" @click="showPopup = true">
+		<button :type="type" ref="button" v-bind="$attrs" :class="`btn ${btnClass}`" @click="showPopup = true">
 			<slot></slot>
 		</button>
 	</div>
@@ -20,12 +20,13 @@
 	export default {
 		props: {
 			message: { default: 'Confirma?' },
-			position: { default: 'left' }
+			position: { default: 'left' },
+			type: { default: 'submit' }
 		},
 
 		data() {
 			return {
-				type: '',
+				btnClass: '',
 
 				showPopup: false
 			};
@@ -62,19 +63,19 @@
 					inheritedClasses.shift(); // remove a primeira classe
 
 					if (inheritedClasses.includes('btn-info')) {
-						this.type = 'btn-info';
+						this.btnClass = 'btn-info';
 					}
 
 					if (inheritedClasses.includes('btn-warning')) {
-						this.type = 'btn-warning';
+						this.btnClass = 'btn-warning';
 					}
 
 					if (inheritedClasses.includes('btn-danger')) {
-						this.type = 'btn-danger';
+						this.btnClass = 'btn-danger';
 					}
 
 					if (inheritedClasses.includes('btn-success')) {
-						this.type = 'btn-success';
+						this.btnClass = 'btn-success';
 					}
 
 					if (
@@ -85,7 +86,7 @@
 						!inheritedClasses.includes('btn-success') &&
 						!inheritedClasses.includes('btn-link')
 					) {
-						this.type = 'btn-info';
+						this.btnClass = 'btn-info';
 					}
 
 					inheritedClasses.forEach(c => this.$refs.button.classList.add(c));

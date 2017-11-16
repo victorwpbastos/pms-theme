@@ -38,13 +38,13 @@ export default class Model {
 			return this.save(options);
 		}
 
-		return this.fetch(this.url, options);
+		return this.fetch(`${this.url}/${this.id}`, options);
 	}
 
 	remove(options = {}) {
 		options = Object.assign(options, { method: 'DELETE' });
 
-		return this.fetch(this.url, options);
+		return this.fetch(`${this.url}/${this.id}`, options);
 	}
 
 	static findAll(options = {}) {
@@ -80,6 +80,7 @@ export default class Model {
 
 	fetch(url, options = {}) {
 		options.url = url;
+
 		return $.ajax(options);
 	}
 
@@ -101,6 +102,17 @@ export default class Model {
 			let fakeView = new Vue({
 				data() {
 					return self;
+				},
+
+				created() {
+					this.unwatch = this.$watch('$data', () => {
+						this.$options.validations.call(this);
+						self.$v = this.$v;
+					}, { deep: true });
+				},
+
+				beforeDestroy() {
+					this.unwatch();
 				},
 
 				validations: self.validations
