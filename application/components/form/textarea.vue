@@ -29,9 +29,11 @@
 			},
 
 			resize() {
-				this.$el.style.overflow = 'hidden';
-				this.$el.style.height = 'auto';
-				this.$el.style.height = (this.$el.scrollHeight) + 'px';
+				if (this.$el.scrollHeight > 0) {
+					this.$el.style.overflow = 'hidden';
+					this.$el.style.height = 'auto';
+					this.$el.style.height = (this.$el.scrollHeight) + 'px';
+				}
 			}
 		}
 	};
