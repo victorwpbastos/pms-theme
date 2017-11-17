@@ -15,7 +15,7 @@
 				<v-header></v-header>
 
 				<main class="flex flex-column">
-					<v-messages :messages="messages"></v-messages>
+					<v-messages :messages="$store.messages"></v-messages>
 
 					<div class="overlay" v-if="showLogin">
 						<v-login @success="handleLoginSuccess"></v-login>
@@ -99,14 +99,18 @@
 
 					jqXHR.fail(() => {
 						if (jqXHR.status === 401) {
-							if (options.url === 'api/permisys') {
+							if (options.url.indexOf('api/permisys') !== -1) {
 								dfd.reject(jqXHR);
 							}
+
+							this.$store.usuario = null;
 
 							if (options.type === 'GET') {
 								this.lastFailedAjaxRequest = { promise: dfd, options: originalOptions };
 							} else {
 								this.lastFailedAjaxRequest = '';
+
+								dfd.reject(jqXHR);
 							}
 						} else {
 							dfd.reject(jqXHR);

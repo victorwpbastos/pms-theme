@@ -51,8 +51,10 @@ module.exports = require => {
 										minimize: true
 									}
 								}, {
-									loader: 'sass-loader?indentedSyntax&precision=10',
+									loader: 'sass-loader',
 									options: {
+										indentedSyntax: true,
+										precision: 10,
 										sourceMap: true
 									}
 								}],
@@ -66,8 +68,9 @@ module.exports = require => {
 										minimize: true
 									}
 								}, {
-									loader: 'sass-loader?precision=10',
+									loader: 'sass-loader',
 									options: {
+										precision: 10,
 										sourceMap: true
 									}
 								}],
@@ -110,8 +113,10 @@ module.exports = require => {
 								minimize: true
 							}
 						}, {
-							loader: 'sass-loader?indentedSyntax&precision=10',
+							loader: 'sass-loader',
 							options: {
+								indentedSyntax: true,
+								precision: 10,
 								sourceMap: true
 							}
 						}],
@@ -128,8 +133,9 @@ module.exports = require => {
 								minimize: true
 							}
 						}, {
-							loader: 'sass-loader?precision=10',
+							loader: 'sass-loader',
 							options: {
+								precision: 10,
 								sourceMap: true
 							}
 						}],

@@ -8,19 +8,19 @@
 			</h4>
 		</router-link>
 
-		<span style="background:tomato;color:#ffffff;padding:0 5px;position:absolute;top:0;left:50%;transform:translateX(-50%);">{{ $store.config.ENV }}</span>
+		<span class="env-label" v-if="$store.config.ENV">{{ $store.config.ENV }}</span>
 
 		<template v-if="$store.usuario && Object.keys($store.usuario).length > 0">
 			<span class="flex v-center m-left-auto">
-				<span class="thin m-right-10" style="font-size:16px;">{{ $store.usuario.nome }}</span>
-				<button type="button" class="btn btn-sm btn-default" @click="logout">
+				<span class="thin m-right-10" style="font-size:16px;">{{ $store.usuario.nome.toUpperCase() }}</span>
+				<a href="#" class="logout-button" @click.prevent="logout">
 					<template v-if="loading">
 						<span class="fa fa-spinner fa-spin"></span> Processando
 					</template>
 					<template v-else>
-						<span class="fa fa-sign-out"></span> Sair
+						SAIR
 					</template>
-				</button>
+				</a>
 			</span>
 		</template>
 	</header>
@@ -63,6 +63,7 @@
 		background: #ffffff;
         box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
         z-index: 100;
+		position: relative;
 
 		a,
 		a:active,
@@ -74,6 +75,30 @@
 
 		img {
 			filter: opacity(70%);
+		}
+
+		.logout-button {
+			padding: 5px;
+			border: solid 1px lighten(tomato, 10%);
+			border-radius: 3px;
+			color: lighten(tomato, 10%);
+			font-size: 12px;
+
+			&:hover {
+				border-color: tomato;
+				color: tomato;
+			}
+		}
+
+		.env-label {
+			position: absolute;
+			top: 0;
+			left: 50%;
+			transform: translateX(-50%);
+			background: tomato;
+			color: #ffffff;
+			padding: 1px 5px;
+			z-index: 9999;
 		}
 	}
 </style>

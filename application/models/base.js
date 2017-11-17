@@ -42,9 +42,11 @@ export default class Model {
 	}
 
 	remove(options = {}) {
+		let url = this.id ? `${this.url}/${this.id}` : `${this.url}`;
+
 		options = Object.assign(options, { method: 'DELETE' });
 
-		return this.fetch(`${this.url}/${this.id}`, options);
+		return this.fetch(url, options);
 	}
 
 	static findAll(options = {}) {

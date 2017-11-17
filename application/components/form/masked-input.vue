@@ -1,5 +1,5 @@
 <template>
-	<v-masked-input
+	<v-text-mask
 		class="form-control"
 		v-model="model"
 		:mask="innerMask"
@@ -9,16 +9,15 @@
 		:pipe="pipe"
 		:showMask="showMask"
 		@input="emitInput"
-	>
-	></v-masked-input>
+	/>
 </template>
 
 <script>
-	import VMaskedInput from 'vue-text-mask';
+	import VTextMask from 'vue-text-mask';
 	import { normalizeMask, unmask } from './mask';
 
 	export default {
-		components: { VMaskedInput },
+		components: { VTextMask },
 
 		props: {
 			value: { default: '' },
