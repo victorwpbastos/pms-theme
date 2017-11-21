@@ -177,3 +177,8 @@ table.table {
 		}
 	}
 }
+
+// evita vários transtornos
+textarea {
+	resize: vertical;
+}

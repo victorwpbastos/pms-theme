@@ -59,7 +59,6 @@
 
 <style lang="scss" scoped>
 	.menu {
-		padding: 0 15px;
 		position: relative;
 
 		&.toggled {
@@ -86,7 +85,7 @@
 			text-decoration: none;
 			color: darken(#ffffff, 0.5);
 			transition: all 300ms;
-			padding: 10px;
+			padding: 10px 15px;
 			position: relative;
 
 			.fa {
