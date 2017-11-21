@@ -46,7 +46,7 @@
 					this.$store.usuario = null;
 					this.$router.push('/');
 				} catch ({ responseJSON }) {
-					this.$store.messages.push(text: responseJSON, type: 'danger', limit: 0 });
+					this.$store.messages.push({ text: responseJSON, type: 'danger', limit: 0 });
 				} finally {
 					this.loading = false;
 				}

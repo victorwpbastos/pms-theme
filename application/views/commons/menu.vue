@@ -1,32 +1,32 @@
 <template>
 	<div class="menu" :class="{ 'toggled': toggled }">
 		<div class="handler" @click="toggled = !toggled">
-			<span class="fa fa-bars"></span>
+			<span class="fa fa-fw fa-bars"></span>
 		</div>
 
 		<router-link to="/" exact>
-			<span class="fa fa-home"></span>
-			<span v-if="!toggled" class="m-left-10">Home</span>
+			<span class="fa fa-fw fa-home"></span>
+			<span v-show="!toggled" :class="toggled ? 'tooltip' : 'm-left-5'">Home</span>
 		</router-link>
 
 		<router-link to="/usuarios" exact>
-			<span class="fa fa-users"></span>
-			<span v-if="!toggled" class="m-left-10">Usuários</span>
+			<span class="fa fa-fw fa-users"></span>
+			<span v-show="!toggled" :class="toggled ? 'tooltip' : 'm-left-5'">Usuários</span>
 		</router-link>
 
 		<router-link to="/documentos" exact>
-			<span class="fa fa-files-o"></span>
-			<span v-if="!toggled" class="m-left-10">Documentos</span>
+			<span class="fa fa-fw fa-files-o"></span>
+			<span v-show="!toggled" :class="toggled ? 'tooltip' : 'm-left-5'">Documentos</span>
 		</router-link>
 
 		<router-link to="/items" exact>
-			<span class="fa fa-table"></span>
-			<span v-if="!toggled" class="m-left-10">Items</span>
+			<span class="fa fa-fw fa-table"></span>
+			<span v-show="!toggled" :class="toggled ? 'tooltip' : 'm-left-5'">Items</span>
 		</router-link>
 
 		<router-link to="/configuracoes" exact>
-			<span class="fa fa-cog"></span>
-			<span v-if="!toggled" class="m-left-10">Configurações</span>
+			<span class="fa fa-fw fa-cog"></span>
+			<span v-show="!toggled" :class="toggled ? 'tooltip' : 'm-left-5'">Configurações</span>
 		</router-link>
 	</div>
 </template>
@@ -61,16 +61,11 @@
 	.menu {
 		padding: 0 15px;
 		position: relative;
-		min-width: 70px;
 
 		&.toggled {
-			width: 70px;
-
-			a:not(.handle) {
-				justify-content: center;
-
-				.fa {
-					font-size: 20px;
+			a:not(.handle):hover {
+				.tooltip {
+					display: inline-block !important;
 				}
 			}
 		}
@@ -88,15 +83,14 @@
 		a {
 			display: flex;
 			align-items: center;
-			height: 50px;
 			text-decoration: none;
 			color: darken(#ffffff, 0.5);
 			transition: all 300ms;
-			padding: 15px 10px;
+			padding: 10px;
 			position: relative;
 
 			.fa {
-				transition: font-size 300ms;
+				font-size: 20px;
 			}
 
 			&:hover,
@@ -110,6 +104,19 @@
 				right: -15px;
 				border: 6px solid transparent;
 				border-right-color: #e7e7e7;
+				cursor: default;
+			}
+
+			.tooltip {
+				display: none;
+				position: absolute;
+				white-space: nowrap;
+				left: 45px;
+				z-index: 1;
+				padding: 2px 4px;
+				border-radius: 3px;
+				background: lighten(#5bc0de, 10);
+				color: #286b86;
 			}
 		}
 	}
