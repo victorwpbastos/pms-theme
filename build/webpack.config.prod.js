@@ -15,7 +15,6 @@ module.exports = require => {
 				},
 				modules: false,
 				useBuiltIns: true,
-				loose: true,
 				debug: false
 			}]
 		],
