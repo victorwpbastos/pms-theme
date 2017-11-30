@@ -127,14 +127,14 @@ module.exports = require => {
 
 			// uncomment the following lines to enable proxy
 
-			// proxy: {
-			// 	'/api': {
-			// 		target: 'http://PROXY_URL',
-			// 		changeOrigin: true,
-			// 		pathRewrite: {'^/api' : ''},
-			// 		logLevel: 'error'
-			// 	}
-			// }
+			proxy: {
+				'/api': {
+					target: 'https://api.sorocaba.sp.gov.br/pub-consulta/api',
+					changeOrigin: true,
+					pathRewrite: {'^/api' : ''},
+					logLevel: 'error'
+				}
+			}
 		}
 	};
 };
