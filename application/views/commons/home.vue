@@ -1,95 +1,85 @@
 <template>
 	<div class="box">
-		<h3 class="thin" style="margin-bottom:15px;">Lorem Ipsum</h3>
+		<div v-if="linhaSelecionada">{{linhaSelecionada}}</div>
 
-		<v-group label="Nome" id="chunda" :validation="model.$v.usuario">
-			<v-input v-model="model.usuario"></v-input>
-		</v-group>
+		<v-data-table :url="url" :fields="fields" :filterFields.sync="filterFields" @rowClick="rowClick">
+			
+			<!-- <div slot="filters" class="painel-filtros">
+				<span style="margin-right: 5px;">
+					<span class="fa fa-filter" style="margin-top: 10px;"></span> Filtros
+				</span>
+				<div class="pull-right">
+					<select v-model="filtroModalidade" class="form-control">
+						<option :value="null">Exibir Todos</option>
+						<option value="Convite">Convite</option>
+						<option value="Pregão Presencial">Pregão Presencial</option>
+						<option value="Leilão">Leilão</option>
+						<option value="Concorrência">Concorrência</option>
+					</select>
+				</div>
+				<input type="text" v-model="filtroObjeto"></input>
+				<div class="clearfix"></div>
+			</div> -->
 
-		{{ cpf }}
-		<v-group label="CPF (emitMasked = true)">
-			<v-masked-input
-			mask="\/\/\/ ### ### ##"
-			v-model="cpf"
-			>
-			></v-masked-input>
-		</v-group>
-
-		{{ cpf2 }}
-		<v-group label="CPF2 (emitMasked = false)">
-			<v-masked-input
-			:mask="[/\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '-', /\d/, /\d/]"
-			v-model="cpf2"
-			:emit-masked="false"
-			>
-			></v-masked-input>
-		</v-group>
-
-		{{ nome }}
-		<v-group label="Nome (emitMasked = true)">
-			<v-masked-input
-			mask="***********************************"
-			v-model="nome"
-			>
-			></v-masked-input>
-		</v-group>
-
-		<div class="text-right" style="margin-bottom:15px;">
-			<v-confirm-button class="btn-info" position="left" message="<strong>Confirma?</strong>">Salvar</v-confirm-button>
-		</div>
-
-		<table class="table">
-			<thead>
-				<tr>
-					<th>nome</th>
-					<th>email</th>
-					<th>telefone</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td>Nome Sobrenome 1</td>
-					<td>email-1@email.com</td>
-					<td>(15) 99999-9991</td>
-				</tr>
-				<tr>
-					<td>Nome Sobrenome 2</td>
-					<td>email-2@email.com</td>
-					<td>(15) 99999-9992</td>
-				</tr>
-				<tr>
-					<td>Nome Sobrenome 3</td>
-					<td>email-3@email.com</td>
-					<td>(15) 99999-9993</td>
-				</tr>
-			</tbody>
-			<tfoot>
-				<tr>
-					<td colspan="4">
-						<v-paginator class="pull-right" :page-count="200"></v-paginator>
-					</td>
-				</tr>
-			</tfoot>
-		</table>
+			<template slot="table" slot-scope="x">
+				asdfsdf
+				{{x}}
+			</template>
+		</v-data-table>
 	</div>
 </template>
 
 <script>
-	import VConfirmButton from 'components/confirm-button';
-	import VPaginator from 'components/paginator';
-	import PermisysModel from 'models/permisys';
+	import VDataTable from 'components/dataTable';
 
 	export default {
-		components: { VConfirmButton, VPaginator },
+		components: { VDataTable },
 
-		data() {
+		data: function() {
 			return {
-				model: new PermisysModel(),
-
-				cpf: '32106338864',
-				cpf2: '32106338864',
-				nome: 'victor_bastos'
+				url: 'http://localhost:3000/api/publicacao',
+				fields: [
+					{ id: 'codigoProcesso',                name: 'PROCESSO',   sort: true, fullSearch: true, style: 'width: 250px;' },
+					{ id: 'dataAbertura',                  name: 'ABERTURA',   sort: true, fullSearch: true, style: '' },
+					{ id: 'statusPublicacaoProcesso.nome', name: 'STATUS',     sort: true, fullSearch: true, style: '' },
+					{ id: 'modalidade',                    name: 'MODALIDADE', sort: true, fullSearch: true, style: '' },
+					{ id: 'descricaoObjeto',               name: 'OBJETO',     sort: true, fullSearch: true, style: '' }
+				],
+				filtroModalidade: null,
+				filtroObjeto: null,
+				linhaSelecionada: null
 			};
+		},
+
+		computed: {
+			filterFields: {
+				get() {
+					return {
+						modalidade: { op: '=', value: this.filtroModalidade },
+						descricaoObjeto: { op: '*', value: this.filtroObjeto },
+					};
+				},
+				set(value) {
+					this.filtroModalidade = value.filtroModalidade && value.filtroModalidade.value;
+					this.filtroObjeto = value.descricaoObjeto && value.descricaoObjeto.value;
+				}
+			}
+		},
+
+		methods: {
+			rowClick(value) {
+				this.linhaSelecionada = value;
+			}
 		}
 	};
 </script>
+
+
+<style scoped>
+	.painel-filtros {
+		padding: 5px 10px 5px 10px;
+		border: 1px solid #e7e7e7;
+		border-radius: 4px;
+		margin-bottom: 10px;
+	}
+</style>
