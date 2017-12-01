@@ -49,9 +49,9 @@
 
 		<!-- TABELA DE DADOS PAGINADOS -->
 		<slot name="table" :fields="fields" :items="itemList">
-			<table v-show="!isEmpty" class="v-paginator-table table table-bordered table-condensed table-hover">
+			<table v-show="!isEmpty" class="v-datatable-table table table-bordered table-condensed table-hover">
 				<!-- HEADER COM ORDENAÇÃO -->
-				<thead class="v-paginator-header">
+				<thead class="v-datatable-header">
 					<tr>
 						<th
 							v-for="field in fields"
@@ -73,7 +73,7 @@
 				</thead>
 
 				<!-- DADOS DA PAGINAÇÃO -->
-				<tbody class="v-paginator-body">
+				<tbody class="v-datatable-body">
 					<template v-for="item in itemList">
 						<slot name="rows" :item="item">
 							<tr @click="$emit('rowClick', item)">
@@ -88,7 +88,7 @@
 		</slot>
 
 		<!-- FOOTER COM CONTROLES DE PAGINAÇÃO -->
-		<div class="v-paginator-footer">
+		<div class="v-datatable-footer">
 			<div class="row">
 				<div class="col-sm-12 col-md-3"  style="margin-bottom: 5px;">
 					<select class="form-control input-sm" v-model.number="userItemsPerPage" :disabled="isEmpty">
@@ -151,7 +151,7 @@
 
 	export default {
 		props: {
-			/** 
+			/**
 				URL que retorna os dados paginados.
 				Os dados devem estar no formato de paginação adequado.
 				Ver https://github.com/tisorocaba-libs/NETCommons/tree/master/Sorocaba.Commons.Entity/Pagination.
@@ -172,7 +172,7 @@
 				default: true
 			},
 
-			/** 
+			/**
 				Caso 'urlAccess' seja falso, os dados serão armazenados nessa propriedade.
 				Deve ser usado com o modificador '.sync' para permitir a 'escrita' pelo componente.
 			*/
@@ -258,7 +258,7 @@
 			fieldsMap() {
 				return new Map(this.fields.map(s => [s.id, s]));
 			},
-		
+
 			/** Indica se a paginação atual não retornou nenhum resultado. */
 			isEmpty() {
 				return this.itemCount == 0;
@@ -387,7 +387,7 @@
 							if (order == 'desc') {
 								this.applySort(field);
 							}
-							
+
 						}
 					});
 				}
@@ -461,7 +461,7 @@
 				}
 
 				/* Inverte a ordem do campo se ele já estiver na ordenação ou usa a ordem padrão. */
-				var sort = this.userSortFields.get(field);  
+				var sort = this.userSortFields.get(field);
 				let order = 'asc';
 				if (sort) {
 					order = (sort.order == 'asc') ? 'desc': 'asc';
@@ -553,7 +553,7 @@
 				try {
 					this.loadingData = true;
 					let data = await $.get(this.url, parameters);
-					
+
 					if (data.itemCount > 0) {
 						this.pageCount = data.pageCount;
 						this.currentPage = data.currentPage;
@@ -573,7 +573,7 @@
 						this.itemOffset = 0;
 						this.itemList = [];
 					}
-				
+
 					this.lastError = null;
 				} catch(e) {
 					this.lastError = e;
@@ -636,7 +636,7 @@
 
 			// Carrega os parâmetros de paginação.
 			this.loadParameters();
-			
+
 			// Carrega os dado pela primeira vez.
 			this.$nextTick(() => this.fetchData());
 		}
@@ -644,20 +644,20 @@
 </script>
 
 <style scoped>
-	.v-paginator-table + .v-paginator-footer {
+	.v-datatable-table + .v-datatable-footer {
 		margin-top: -16px;
 		padding: 15px;
 		border-radius: 0 0 4px 4px;
 		background-color: #ddd;
 	}
 
-	.v-paginator-header  {
+	.v-datatable-header  {
 		user-select: none;
 		cursor: pointer;
 		background-color: #ddd;
 	}
 
-	.v-paginator-body {
+	.v-datatable-body {
 		background-color: #fff
 	}
 </style>
