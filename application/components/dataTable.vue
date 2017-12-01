@@ -1,14 +1,14 @@
 <template>
 	<div>
-		<!-- AVISO DE ERRO NA REQUISIÇÃO -->
-		<div v-if="hasError" class="alert alert-danger">
+		<!-- AVISO DE ERRO DURANTE A REQUISIÇÃO -->
+		<div v-if="lastError" class="alert alert-danger">
 			Ocorreu um erro durante a consulta aos dados.
 			<button type="button" class="btn btn-danger btn-xs pull-right" @click="fetchData">
 				<i class="fa fa-exclamation-triangle"></i> Tentar Novamente
 			</button>
 		</div>
 
-		<!-- FULLSEARCH FIELDS -->
+		<!-- FULLSEARCH -->
 		<template v-if="fullSearchFieldsAvailable">
 			<div class="checkbox">
 				Selecione os campos para pesquisa:
@@ -39,7 +39,7 @@
 			</div>
 		</template>
 
-		<!-- SLOT PARA FILTER FIELDS -->
+		<!-- SLOT PARA FILTROS ADICIONAIS -->
 		<slot name="filters"></slot>
 
 		<!-- AVISO DE NENHUM RESULTADO -->
@@ -50,22 +50,23 @@
 		<!-- TABELA DE DADOS PAGINADOS -->
 		<slot name="table" :fields="fields" :items="itemList">
 			<table v-show="!isEmpty" class="v-paginator-table table table-bordered table-condensed table-hover">
-
 				<!-- HEADER COM ORDENAÇÃO -->
 				<thead class="v-paginator-header">
 					<tr>
 						<th
 							v-for="field in fields"
 							:key="field.id"
-							@click="applySort(field.id, $event)"
 							class="text-center"
 							style="white-space: nowrap;"
 							:style="field.style || ''"
+							@click="applySort(field.id, $event)"
 						>
 							{{field.name}}
-							<i v-show="field.sortOrder=='asc'" class="fa fa-sort-alpha-asc"></i>
-							<i v-show="field.sortOrder=='desc'" class="fa fa-sort-alpha-desc"></i>
-							<sup>{{field.sortIndex}}</sup>
+							<template v-if="userSortFields.has(field.id)">
+								<i v-show="userSortFields.get(field.id).order=='asc'" class="fa fa-sort-alpha-asc"></i>
+								<i v-show="userSortFields.get(field.id).order=='desc'" class="fa fa-sort-alpha-desc"></i>
+								<sup>{{userSortFields.get(field.id).index}}</sup>
+							</template>
 						</th>
 						<slot name="extraHeaders"></slot>
 					</tr>
@@ -83,7 +84,6 @@
 						</slot>
 					</template>
 				</tbody>
-
 			</table>
 		</slot>
 
@@ -138,6 +138,7 @@
 <script>
 	import $ from 'jquery';
 
+	/* Expressões regulares para validação de expressões 'filter_fields'. */
 	let ffOperator = String.raw`(=|!=|\*|%|>=|>|<=|<)`;
 	let ffExpression = String.raw`(\w+\.)*(\w)+${ffOperator}.+`;
 	let ffExpressionList = String.raw`^${ffExpression}(,${ffExpression})*$`;
@@ -145,62 +146,125 @@
 	let ffExpressionReg = new RegExp(ffExpression);
 	let ffExpressionListReg = new RegExp(ffExpressionList);
 
+	/* Valores de itens por página permitidos. */
+	let allowedItemsPerPage = ['10', '20', '25', '50', '100'];
+
 	export default {
 		props: {
-			url: { default: undefined },
-			urlAccess: { default: true },
-			config: { default: undefined },
-			fields: { default: () => [] },
-			footerColspan: { default: null },
-			filterFields: { default: () => {} }
+			/** 
+				URL que retorna os dados paginados.
+				Os dados devem estar no formato de paginação adequado.
+				Ver https://github.com/tisorocaba-libs/NETCommons/tree/master/Sorocaba.Commons.Entity/Pagination.
+			*/
+			url: {
+				type: String,
+				required: true,
+				default: null
+			},
+
+			/**
+				Indica se o componente pode ler e escrever diretamente da URL.
+				A URL será usada para armazenar os parâmetros de paginação.
+			*/
+			urlAccess: {
+				type: Boolean,
+				required: false,
+				default: true
+			},
+
+			/** 
+				Caso 'urlAccess' seja falso, os dados serão armazenados nessa propriedade.
+				Deve ser usado com o modificador '.sync' para permitir a 'escrita' pelo componente.
+			*/
+			parameters: {
+				type: Object,
+				required: false,
+				default: null
+			},
+
+			/**
+				Array com os objetos de configuração dos campos.
+				Usados para exibição, busca e ordenação dos resultados.
+
+				Exemplo de objeto de configuração de campo:
+					{
+						id: 'codigoProcesso',  // Nome do campo como retornado na paginação.
+						name: 'PROCESSO',      // Nome de exibição do campo.
+						sort: true,            // Indica se os resultados podem ser ordenados por este campo.
+						fullSearch: true,      // Indica se buscas 'fullsearch' podem ser realizadas nesse campo.
+						style: 'width: 250px;' // Estilo CSS que será aplicado no cabeçalho da tabela gerada na paginação.
+					}
+			*/
+			fields: {
+				type: Array,
+				required: true,
+				default: () => []
+			},
+
+			/**
+				Objeto usado para filtrar os resultados no padrão 'filter_fields'.
+				Cada vez que a propriedade for alterada, os filtros serão automaticamente aplicados.
+				Cada propriedade do objeto corresponde a um filtro.
+
+				Exemplo:
+				{
+					descricaoObjeto: { op: '*', value: 'AQUISIÇÃO DE SERVIÇO' }
+				}
+			*/
+			filterFields: {
+				type: Object,
+				required: false,
+				default: () => {}
+			}
 		},
 
 		data() {
 			return {
-				/* Campos Internos */
-				fieldsMap: null,
-				userSortFields: new Map(),
-				userFullSearchFields: [],
-				userFullSearchValue: '',
-				loadingConfig: false,
-				loadingData: false,
-				hasError: false,
+				/* Campos internos. */
+
+				userSortFields: new Map(), // Campos incluídos na ordenação atual e sua ordem ('asc' ou 'desc').
+				userFullSearchFields: [],  // Campos marcados para serem incluídos na busca.
+				userFullSearchValue: '',   // Valor atual do campo de busca.
+
+				loadingParameters: false, // Indica se os parâmetros de paginação estão sendo carregados (da url ou propriedade).
+				loadingData: false,       // Indica se uma requisição aos dados de paginação está em andamento.
+				lastError: null,          // Armazena o erro da última requisição (se houve erro).
 
 				/* Enviados ao Back-end */
-				page: 1,
-				items_per_page: 10,
-				show_all_items: false,
-				sort_fields: '',
-				filter_fields: '',
-				fullsearch_fields: '',
-				fullsearch_value: '',
+
+				page: 1,               // Número da página requisitada.
+				items_per_page: 10,    // Quantidade de itens por página requisitado.
+				show_all_items: false, // Indica se todos os itens devem ser retornados, independente dos parâmeros anteriores.
+				sort_fields: '',       // Lista de campos de ordenação. Define a ordem dos dados retornados.
+				filter_fields: '',     // Lista de expressões para filtro no formato 'filter_fields'.
+				fullsearch_fields: '', // Lista de campos que participarão da busca 'fullsearch'.
+				fullsearch_value: '',  // Valor usado para a busca 'fullsearch'.
 
 				/* Recebidos do Back-end */
-				pageCount: 0,
-				currentPage: 0,
-				itemCount: 0,
-				itemOffset: 0,
-				itemList: [],
+
+				pageCount: 0,   // Total de páginas disponíveis (muda de acordo com o 'items_per_page');
+				currentPage: 0, // Página atual retornada.
+				itemCount: 0,   // Total de itens disponíveis.
+				itemOffset: 0,  // Índice do primeiro item retornado.
+				itemList: [],   // Lista com os itens da janela de paginação retornada.
 			};
 		},
 
 		computed: {
-			footerColspanValue() {
-				return this.footerColspan || this.fields.length;
+			/**
+				Mapa para facilitar o acesso aos campos utilizando o 'id'.
+				Também cria uma cópia dos objetos para permitir a alteração.
+			*/
+			fieldsMap() {
+				return new Map(this.fields.map(s => [s.id, s]));
 			},
-
+		
+			/** Indica se a paginação atual não retornou nenhum resultado. */
 			isEmpty() {
 				return this.itemCount == 0;
 			},
 
-			canGoToPreviousPage() {
-				return this.currentPage > 1;
-			},
-
-			canGoToNextPage() {
-				return this.currentPage < this.pageCount;
-			},
-
+			/** Índice final da janela de paginação atual. Leva em conta o número de itens efetivos na página. */
 			finalItemOffset() {
 				if (this.show_all_items) {
 					return this.itemCount;
@@ -210,6 +274,17 @@
 				}
 			},
 
+			/** Indica se é possível navegar para a página anterior. */
+			canGoToPreviousPage() {
+				return this.currentPage > 1;
+			},
+
+			/** Indica se é possível navegar para a próxima página. */
+			canGoToNextPage() {
+				return this.currentPage < this.pageCount;
+			},
+
+			/** Número de itens por página efetivo. Leva em consideração o campo 'show_all_items'. */
 			userItemsPerPage: {
 				get() {
 					return (this.show_all_items) ? -1 : this.items_per_page;
@@ -224,18 +299,22 @@
 				}
 			},
 
+			/** Somente os campos que podem fazer parte da ordenação. */
 			sortFields() {
 				return this.fields.filter(f => f.sort == true);
 			},
 
+			/** Somente os campos que podem fazer parte da busca 'fullsearch'. */
 			fullSearchFields() {
 				return this.fields.filter(f => f.fullSearch == true);
 			},
 
+			/** Indica se existe pelo menos um campo disponível para a busca 'fullsearch'. */
 			fullSearchFieldsAvailable() {
 				return this.fullSearchFields.length > 0;
 			},
 
+			/** Usando os campos de envio ao back-end, retorna a última busca 'fullsearch' aplicada. */
 			currentFullSearch() {
 				if (this.fullsearch_fields && this.fullsearch_value) {
 					return {
@@ -249,11 +328,11 @@
 		},
 
 		watch: {
-			page() {
+			page(newValue, oldValue) {
 				this.fetchData();
 			},
 
-			userItemsPerPage: function() {
+			userItemsPerPage() {
 				this.fetchData();
 			},
 
@@ -270,35 +349,36 @@
 		},
 
 		methods: {
-			loadConfig() {
-				let config = null;
+			/** Carrega e valida os parâmetros de paginação. */
+			loadParameters() {
+				let params = null;
 
 				if (this.urlAccess) {
-					config = this.$route.query;
+					params = this.$route.query;
 				} else {
-					config = this.config;
+					params = this.parameters;
 				}
 
-				if (!config) {
+				if (!params) {
 					return;
 				}
 
-				this.loadingConfig = true;
+				this.loadingParameters = true;
 
-				if (config.p && /^\d+$/.test(config.p)) {
-					this.page = parseInt(config.p, 10);
+				if (params.p && /^\d+$/.test(params.p)) {
+					this.page = parseInt(params.p, 10);
 				}
 
-				if (config.ipp && ['10', '20', '25', '50', '100'].indexOf(config.ipp) >= 0) {
-					this.items_per_page = parseInt(config.ipp, 10);
+				if (params.ipp && allowedItemsPerPage.indexOf(params.ipp) >= 0) {
+					this.items_per_page = parseInt(params.ipp, 10);
 				}
 
-				if (config.sai && (config.sai == 'true' || config.sai == 'false')) {
-					this.show_all_items = (config.sai == 'true');
+				if (params.sai && (params.sai == 'true' || params.sai == 'false')) {
+					this.show_all_items = (params.sai == 'true');
 				}
 
-				if (config.sf && /^\w+:(asc|desc)(,\w+:(asc|desc))*$/.test(config.sf )) {
-					config.sf.split(',').forEach(s => {
+				if (params.sf && /^\w+:(asc|desc)(,\w+:(asc|desc))*$/.test(params.sf)) {
+					params.sf.split(',').forEach(s => {
 						var sParts = s.split(':');
 						var field = sParts[0];
 						var order = sParts[1];
@@ -312,32 +392,34 @@
 					});
 				}
 
-				if (config.ff && ffExpressionListReg.test(config.ff)) {
-					let ffObject = this.filterFieldsToObject(config.ff);
+				if (params.ff && ffExpressionListReg.test(params.ff)) {
+					let ffObject = this.filterFieldsToObject(params.ff);
 					this.filter_fields = this.filterFieldsToString(ffObject);
 					this.$emit('update:filterFields', ffObject);
 				}
 
-				if (config.fsf && /^\w+(,\w+)*$/.test(config.fsf)) {
+				if (params.fsf && /^\w+(,\w+)*$/.test(params.fsf)) {
 					this.userFullSearchFields = [];
-					config.fsf.split(',').forEach(f => {
+					params.fsf.split(',').forEach(f => {
 						if (this.fieldsMap.has(f)) {
 							this.userFullSearchFields.push(f);
 						}
 					});
 				}
 
-				if (config.fsv) {
-					this.userFullSearchValue = config.fsv.slice(0, 100);
+				if (params.fsv) {
+					this.userFullSearchValue = params.fsv.slice(0, 100);
 				}
 
 				this.applyFullSearch();
 
-				this.loadingConfig = false;
+				// Aguarda a execução dos watchers para desativar o estado de carregamento de parâmetros.
+				this.$nextTick(() => this.loadingParameters = false);
 			},
 
-			storeConfig() {
-				let config = {
+			/** Armazena os parâmeros de paginação. */
+			storeParameters() {
+				let parameters = {
 					p: this.page,
 					ipp: this.items_per_page,
 					sai: this.show_all_items,
@@ -349,12 +431,13 @@
 
 
 				if (this.urlAccess) {
-					this.$router.replace({ query: config });
+					this.$router.replace({ query: parameters });
 				} else {
-					this.$emit('update:config', config);
+					this.$emit('update:parameters', parameters);
 				}
 			},
 
+			/** Aplica a busca 'fullsearch' com os parâmetros selecionados. */
 			applyFullSearch() {
 				if (this.userFullSearchFields.length > 0 && this.userFullSearchValue) {
 					this.fullsearch_fields = this.userFullSearchFields.join(',');
@@ -367,52 +450,82 @@
 				this.fetchData();
 			},
 
+			/**
+				Aplica a ordenação ao campo informado.
+				O parâmetro 'event' é usado para decidir se o campo vai substituir ou incrementar a ordenação atual.
+			*/
 			applySort(field, event) {
-
 				// Verifica se o campo é ordenável.
 				if (!this.fieldsMap.get(field).sort) {
 					return;
 				}
 
 				/* Inverte a ordem do campo se ele já estiver na ordenação ou usa a ordem padrão. */
-				var order = this.userSortFields.get(field); 
-				if (order) {
-					order = (order == 'asc') ? 'desc': 'asc';
-				} else {
-					order = 'asc';
+				var sort = this.userSortFields.get(field);  
+				let order = 'asc';
+				if (sort) {
+					order = (sort.order == 'asc') ? 'desc': 'asc';
 				}
 
-				// Remove o campo da ordenação.
+				// Remove o campo da ordenação para adicioná-lo ao fim da mesma ...
 				if (!event || event.ctrlKey) {
 					this.userSortFields.delete(field);
 				}
-				// Limpa todos os campos da ordenação.
+				// .. ou limpa todos os campos da ordenação: o campo informado será o único.
 				else {
 					this.userSortFields.clear();
-					this.fields.forEach( s =>s.sortOrder = null);
 				}
 
-				/* Adiciona o campo na ordenção. */
-				this.userSortFields.set(field, order);
-				this.fieldsMap.get(field).sortOrder = order;
-
-				/* Recalcula o índice de todos os campos da ordenação. */
-				let keys = [...this.userSortFields.keys()];
-				this.fields.forEach(f => {
-					let index = keys.indexOf(f.id);
-					f.sortIndex = (index == -1) ? null : index+1;
-				});
+				// Adiciona o campo na ordenção.
+				let index = this.userSortFields.size + 1;
+				this.userSortFields.set(field, { order, index });
 
 				/* Atribuí o filtro de ordenação do back-end. */
 				this.sort_fields = [...this.userSortFields]
-					.map(s => s[0] + ':' + s[1])
+					.map(s => s[0] + ':' + s[1].order)
 					.join(',');
 
+				// Atualiza os dados.
 				this.fetchData();
 			},
 
+			goToPage(n) {
+				if (!n) {
+					n = this.pageCount;
+				}
+				if (n < 1) {
+					n = 1;
+				}
+				if (n > this.pageCount) {
+					n = this.pageCount;
+				}
+				this.page = n;
+			},
+
+			goToFirstPage() {
+				this.goToPage(1);
+			},
+
+			goToPreviousPage() {
+				this.goToPage(this.page-1);
+			},
+
+			goToNextPage() {
+				this.goToPage(this.page+1);
+			},
+
+			goToLastPage() {
+				this.goToPage(null);
+			},
+
+			/** Obtém os dados de paginação através de uma requisição AJAX. */
 			async fetchData() {
-				if (this.loadingConfig) {
+
+				/*
+					Várias alterações são feitas durante o carregamento dos parâmetros.
+					Evita requisições nesta etapa.
+				*/
+				if (this.loadingParameters) {
 					return;
 				}
 
@@ -435,7 +548,7 @@
 					parameters.fullsearch_value = this.fullsearch_value;
 				}
 
-				this.storeConfig();
+				this.storeParameters();
 
 				try {
 					this.loadingData = true;
@@ -461,9 +574,9 @@
 						this.itemList = [];
 					}
 				
-					this.hasError = false;
+					this.lastError = null;
 				} catch(e) {
-					this.hasError = true;
+					this.lastError = e;
 				} finally {
 					// Ajusta a página atual solicitada, caso o número total de páginas tenha sido alterado.
 					if (this.page > this.pageCount) {
@@ -473,26 +586,7 @@
 				}
 			},
 
-			goToFirstPage() {
-				this.page = 1;
-			},
-
-			goToPreviousPage() {
-				if (this.page > 1) {
-					this.page--;
-				}
-			},
-
-			goToNextPage() {
-				if (this.page < this.pageCount) {
-					this.page++;
-				}
-			},
-
-			goToLastPage() {
-				this.page = (this.pageCount > 0) ? this.pageCount : 1;
-			},
-
+			/** Converte uma string 'filter_field' em um objeto correspondente. */
 			filterFieldsToObject(filterFieldsString) {
 				let filterFields = {};
 				filterFieldsString
@@ -509,6 +603,7 @@
 				return filterFields;
 			},
 
+			/** Converte um objeto 'filter_field' em uma string correspondente. */
 			filterFieldsToString(filterFieldsObject) {
 				if (!filterFieldsObject) {
 					return null;
@@ -527,6 +622,7 @@
 					.join(',');
 			},
 
+			/** Navega por caminhos de propriedade separados por ponto ("."). */
 			getProperty(object, property) {
 				let data = object;
 				property.split('.').forEach(p => data = data[p]);
@@ -535,9 +631,13 @@
 		},
 
 		created() {
-			this.fieldsMap = new Map(this.fields.map(s => [s.id, s]));
+			// Marca todos os campos para serem incluídos na busca 'fullsearch'.
 			this.userFullSearchFields = this.fullSearchFields.map(s => s.id);
-			this.loadConfig();
+
+			// Carrega os parâmetros de paginação.
+			this.loadParameters();
+			
+			// Carrega os dado pela primeira vez.
 			this.$nextTick(() => this.fetchData());
 		}
 	};
