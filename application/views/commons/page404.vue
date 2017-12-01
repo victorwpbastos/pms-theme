@@ -9,7 +9,7 @@
 	</div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="less" scoped>
 	.wrapper {
 		margin-top: 100px;
 		text-align: center;

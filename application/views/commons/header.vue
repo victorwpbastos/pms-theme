@@ -64,7 +64,7 @@
 	};
 </script>
 
-<style lang="scss" scoped>
+<style lang="less" scoped>
 	header {
 		min-height: 70px;
 		max-height: 70px;

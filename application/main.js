@@ -5,7 +5,7 @@ import routes from 'routes';
 import Layout from 'views/commons/layout';
 import initializer from 'initializer';
 import Vuelidate from 'vuelidate';
-import 'assets/css/main.scss';
+import 'assets/css/main.less';
 
 Vue.use(VueRouter);
 Vue.use(Vuelidate);

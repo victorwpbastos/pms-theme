@@ -73,7 +73,7 @@
 	};
 </script>
 
-<style lang="scss" scoped>
+<style lang="less" scoped>
 	.box {
 		width: 500px;
 		padding: 0;

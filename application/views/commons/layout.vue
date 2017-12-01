@@ -134,7 +134,7 @@
 	};
 </script>
 
-<style lang="scss" scoped>
+<style lang="less" scoped>
 	.sidebar {
 		background: #286b86;
 	}

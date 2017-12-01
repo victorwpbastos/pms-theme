@@ -42,7 +42,7 @@ module.exports = require => {
 					options: {
 						loaders: {
 							js: 'babel-loader?' + JSON.stringify(babelOptions),
-							sass: ExtractTextPlugin.extract({
+							less: ExtractTextPlugin.extract({
 								use: [{
 									loader: 'css-loader',
 									options: {
@@ -50,26 +50,8 @@ module.exports = require => {
 										minimize: true
 									}
 								}, {
-									loader: 'sass-loader',
+									loader: 'less-loader',
 									options: {
-										indentedSyntax: true,
-										precision: 10,
-										sourceMap: true
-									}
-								}],
-								publicPath: '../'
-							}),
-							scss: ExtractTextPlugin.extract({
-								use: [{
-									loader: 'css-loader',
-									options: {
-										sourceMap: true,
-										minimize: true
-									}
-								}, {
-									loader: 'sass-loader',
-									options: {
-										precision: 10,
 										sourceMap: true
 									}
 								}],
@@ -103,7 +85,7 @@ module.exports = require => {
 					exclude: /node_modules/
 				},
 				{
-					test: /\.sass$/i,
+					test: /\.less$/i,
 					loader: ExtractTextPlugin.extract({
 						use: [{
 							loader: 'css-loader',
@@ -112,29 +94,8 @@ module.exports = require => {
 								minimize: true
 							}
 						}, {
-							loader: 'sass-loader',
+							loader: 'less-loader',
 							options: {
-								indentedSyntax: true,
-								precision: 10,
-								sourceMap: true
-							}
-						}],
-						publicPath: '../'
-					})
-				},
-				{
-					test: /\.scss$/i,
-					loader: ExtractTextPlugin.extract({
-						use: [{
-							loader: 'css-loader',
-							options: {
-								sourceMap: true,
-								minimize: true
-							}
-						}, {
-							loader: 'sass-loader',
-							options: {
-								precision: 10,
 								sourceMap: true
 							}
 						}],

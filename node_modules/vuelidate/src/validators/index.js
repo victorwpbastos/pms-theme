@@ -3,6 +3,8 @@ import alphaNum from './alphaNum'
 import numeric from './numeric'
 import between from './between'
 import email from './email'
+import ipAddress from './ipAddress'
+import macAddress from './macAddress'
 import maxLength from './maxLength'
 import minLength from './minLength'
 import required from './required'
@@ -12,6 +14,8 @@ import sameAs from './sameAs'
 import url from './url'
 import or from './or'
 import and from './and'
+import minValue from './minValue'
+import maxValue from './maxValue'
 
 export {
   alpha,
@@ -19,6 +23,8 @@ export {
   numeric,
   between,
   email,
+  ipAddress,
+  macAddress,
   maxLength,
   minLength,
   required,
@@ -27,5 +33,7 @@ export {
   sameAs,
   url,
   or,
-  and
+  and,
+  minValue,
+  maxValue
 }

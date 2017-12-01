@@ -40,8 +40,7 @@ module.exports = require => {
 					options: {
 						loaders: {
 							js: 'babel-loader?' + JSON.stringify(babelOptions),
-							scss: 'vue-style-loader!css-loader!sass-loader?precision=10',
-							sass: 'vue-style-loader!css-loader!sass-loader?indentedSyntax&precision=10'
+							less: 'vue-style-loader!css-loader!less-loader'
 						}
 					}
 				},
@@ -51,19 +50,11 @@ module.exports = require => {
 					exclude: /node_modules/
 				},
 				{
-					test: /\.sass$/i,
+					test: /\.less$/i,
 					use: [
 						{ loader: 'style-loader' },
 						{ loader: 'css-loader' },
-						{ loader: 'sass-loader?indentedSyntax=sass&precision=10'	}
-					]
-				},
-				{
-					test: /\.scss$/i,
-					use: [
-						{ loader: 'style-loader' },
-						{ loader: 'css-loader' },
-						{ loader: 'sass-loader?precision=10'	}
+						{ loader: 'less-loader'	}
 					]
 				},
 				{
