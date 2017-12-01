@@ -15,7 +15,7 @@
 				<v-header></v-header>
 
 				<main class="flex flex-column">
-					<v-messages :messages="$store.messages"></v-messages>
+					<v-toasts></v-toasts>
 
 					<div class="overlay" v-if="showLogin">
 						<v-login @success="handleLoginSuccess"></v-login>
@@ -38,11 +38,11 @@
 	import VMenu from 'views/commons/menu';
 	import VFooter from 'views/commons/footer';
 	import VLogin from 'views/permisys/login';
-	import VMessages from 'components/messages';
+	import VToasts from 'components/toast';
 	import PermisysModel from 'models/permisys';
 
 	export default {
-		components: { VHeader, VMenu, VFooter, VLogin, VMessages },
+		components: { VHeader, VMenu, VFooter, VLogin, VToasts },
 
 		data() {
 			return {
@@ -144,6 +144,7 @@
 		justify-content: space-between;
 
 		main {
+			position: relative;
 			flex: 1;
 			height: calc(100vh - 70px);
 			overflow-y: scroll;

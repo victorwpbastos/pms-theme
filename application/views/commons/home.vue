@@ -1,7 +1,29 @@
 <template>
 	<div class="box">
+		<!-- TOAST -->
+		<h3 class="thin" style="margin-bottom: 15px;">Toasts</h3>
+
+		<div class="row">
+			<div class="col-md-4">
+				<select class="form-control" v-model="toastPosition">
+					<option value="TOP_LEFT">TOP_LEFT</option>
+					<option value="TOP_RIGHT">TOP_RIGHT</option>
+					<option value="BOTTOM_LEFT">BOTTOM_LEFT</option>
+					<option value="BOTTOM_RIGHT">BOTTOM_RIGHT</option>
+				</select>
+			</div>
+			<div class="col-md-6">
+				<input type="text" class="form-control" v-model="toastText"></input>
+			</div>
+			<div class="col-md-2">
+				<button type="button" class="btn btn-primary btn-block" @click="addToast">
+					Adicionar Toast
+				</button>
+			</div>
+		</div>
+
 		<!-- DATATABLE PADRÃO -->
-		<h3 class="thin" style="margin-bottom: 15px;">DataTable Padrão</h3>
+		<h3 class="thin" style="margin-top: 30px; margin-bottom: 15px;">DataTable Padrão</h3>
 
 		<v-data-table :url="url" :fields="fields"></v-data-table>
 
@@ -61,7 +83,9 @@
 				],
 				parameters: null,
 				currentItem: null,
-				filtroModalidade: null
+				filtroModalidade: null,
+				toastText: 'Olá, Toast!',
+				toastPosition: 'BOTTOM_LEFT'
 			};
 		},
 
@@ -77,6 +101,15 @@
 				}
 			}
 		},
+
+		methods: {
+			addToast() {
+				this.$toast.add({
+					text: this.toastText,
+					position: this.toastPosition
+				});
+			}
+		}
 	};
 </script>
 
