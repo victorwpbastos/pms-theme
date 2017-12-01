@@ -30,19 +30,13 @@
 				</div>
 			</template>
 
-			<template slot="table" scope="{fields, items}">
-				<div style="margin-bottom: 10px;">
-					<div class="row" v-for="item in items" :key="item.id" @click="() => currentItem = item">
-						<div class="col-md-12">
-							<div class="card">
-								<div><strong>Processo:</strong> {{item.codigoProcesso}}</div>
-								<div><strong>Abertura:</strong> {{item.dataAbertura}}</div>
-								<div><strong>Status:</strong> {{item.statusPublicacaoProcesso.nome}}</div>
-								<div><strong>Modalidade:</strong> {{item.modalidade}}</div>
-								<div><strong>Descrição:</strong> {{item.descricaoObjeto}}</div>
-							</div>
-						</div>
-					</div>
+			<template slot="table" slot-scope="{fields, items}">
+				<div class="card" style="margin-bottom: 10px;" v-for="item in items" :key="item.id" @click="currentItem = item">
+					<div><strong>Processo:</strong> {{item.codigoProcesso}}</div>
+					<div><strong>Abertura:</strong> {{item.dataAbertura}}</div>
+					<div><strong>Status:</strong> {{item.statusPublicacaoProcesso.nome}}</div>
+					<div><strong>Modalidade:</strong> {{item.modalidade}}</div>
+					<div><strong>Descrição:</strong> {{item.descricaoObjeto}}</div>
 				</div>
 			</template>
 		</v-data-table>
