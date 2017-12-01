@@ -8,6 +8,15 @@
 			</h4>
 		</router-link>
 
+		<transition name="fade">
+			<span
+				v-if="$store.pendingRequests"
+				class="fa fa-cog fa-spin fa-2x fa-fw"
+				style="font-size: 19px; color:tomato;"
+			>
+			</span>
+		</transition>
+
 		<span class="env-label" v-if="$store.config.ENV">{{ $store.config.ENV }}</span>
 
 		<template v-if="$store.usuario && Object.keys($store.usuario).length > 0">
@@ -99,6 +108,14 @@
 			color: #ffffff;
 			padding: 1px 5px;
 			z-index: 9999;
+		}
+
+		.fade-leave-active {
+			transition: opacity 1s
+		}
+
+		.fade-leave-to {
+			opacity: 0
 		}
 	}
 </style>
