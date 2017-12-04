@@ -19,10 +19,10 @@
 		computed: {
 			toasts() {
 				return {
-					'top-left': this.$toast.toasts.filter(t => t.position === 'TOP_LEFT'),
-					'top-right': this.$toast.toasts.filter(t => t.position === 'TOP_RIGHT'),
-					'bottom-left': this.$toast.toasts.filter(t => t.position === 'BOTTOM_LEFT'),
-					'bottom-right': this.$toast.toasts.filter(t => t.position === 'BOTTOM_RIGHT')
+					'top-left': this.$toast.toasts.filter(t => t.position.toUpperCase() === 'TOP_LEFT'),
+					'top-right': this.$toast.toasts.filter(t => t.position.toUpperCase() === 'TOP_RIGHT'),
+					'bottom-left': this.$toast.toasts.filter(t => t.position.toUpperCase() === 'BOTTOM_LEFT'),
+					'bottom-right': this.$toast.toasts.filter(t => t.position.toUpperCase() === 'BOTTOM_RIGHT')
 				};
 			}
 		}

@@ -36,23 +36,21 @@
 		color: white;
 		margin-bottom: 10px;
 		border-radius: 5px;
+		box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.25);
 	}
 
 	.toast-success {
 		background-color: #47842ef2;
 		border: 1px solid #cbe3bb;
-		box-shadow: 5px 5px rgba(0, 0, 0, 0.15);
 	}
 
 	.toast-warning {
 		background-color: #a5a032f2;
 		border: 1px solid #af9c26;
-		box-shadow: 5px 5px rgba(0, 0, 0, 0.15);
 	}
 
 	.toast-danger {
 		background-color: #ad3530f2;
 		border: 1px solid #c37c71;
-		box-shadow: 5px 5px rgba(0, 0, 0, 0.15);
 	}
 </style>
