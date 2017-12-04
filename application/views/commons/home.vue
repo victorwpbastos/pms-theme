@@ -1,7 +1,13 @@
 <template>
 	<div class="box">
+		<!-- LOADING -->
+		<h3 class="thin" style="margin-bottom: 15px;">Loading</h3>
+		<v-loading :active="loading" message="Salvando...">
+			<input type="text" class="form-control">
+		</v-loading>
+
 		<!-- ERROR MESSAGE -->
-		<h3 class="thin" style="margin-bottom: 15px;">Error Message</h3>
+		<h3 class="thin" style="margin-top: 30px; margin-bottom: 15px;">Error Message</h3>
 
 		<div class="row">
 			<div class="col-md-10">
@@ -91,9 +97,10 @@
 
 <script>
 	import VDataTable from 'components/dataTable';
+	import VLoading from 'components/loading';
 
 	export default {
-		components: { VDataTable },
+		components: { VDataTable, VLoading },
 
 		data: function() {
 			return {
@@ -112,7 +119,8 @@
 				toastText: 'Corpo do texto.',
 				toastPosition: 'BOTTOM_LEFT',
 				toastClass: 'success',
-				errorMessage: 'Mensagem de erro.'
+				errorMessage: 'Mensagem de erro.',
+				loading: false
 			};
 		},
 
@@ -127,6 +135,14 @@
 					this.filtroModalidade = value.filtroModalidade && value.filtroModalidade.value;
 				}
 			}
+		},
+
+		created() {
+			this.loading = true;
+
+			setTimeout(() => {
+				this.loading = false;
+			}, 5000);
 		},
 
 		methods: {
