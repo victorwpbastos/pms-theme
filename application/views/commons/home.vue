@@ -4,7 +4,7 @@
 		<h3 class="thin" style="margin-bottom: 15px;">Toasts</h3>
 
 		<div class="row">
-			<div class="col-md-4">
+			<div class="col-md-2">
 				<select class="form-control" v-model="toastPosition">
 					<option value="TOP_LEFT">TOP_LEFT</option>
 					<option value="TOP_RIGHT">TOP_RIGHT</option>
@@ -12,8 +12,18 @@
 					<option value="BOTTOM_RIGHT">BOTTOM_RIGHT</option>
 				</select>
 			</div>
-			<div class="col-md-6">
+			<div class="col-md-3">
+				<input type="text" class="form-control" v-model="toastTitle"></input>
+			</div>
+			<div class="col-md-3">
 				<input type="text" class="form-control" v-model="toastText"></input>
+			</div>
+			<div class="col-md-2">
+				<select class="form-control" v-model="toastClass">
+					<option value="success">Success</option>
+					<option value="warning">Warning</option>
+					<option value="danger">Danger</option>
+				</select>
 			</div>
 			<div class="col-md-2">
 				<button type="button" class="btn btn-primary btn-block" @click="addToast">
@@ -84,8 +94,10 @@
 				parameters: null,
 				currentItem: null,
 				filtroModalidade: null,
-				toastText: 'Olá, Toast!',
-				toastPosition: 'BOTTOM_LEFT'
+				toastTitle: 'Título',
+				toastText: 'Corpo do texto.',
+				toastPosition: 'BOTTOM_LEFT',
+				toastClass: 'success'
 			};
 		},
 
@@ -105,8 +117,10 @@
 		methods: {
 			addToast() {
 				this.$toast.add({
+					title: this.toastTitle,
 					text: this.toastText,
-					position: this.toastPosition
+					position: this.toastPosition,
+					class: this.toastClass
 				});
 			}
 		}

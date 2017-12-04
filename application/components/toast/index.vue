@@ -1,41 +1,10 @@
 <template>
 	<div>
-		<div class="top-left">
+		<div v-for="(value, key) in toasts" :class="[key]" :key="key">
 			<transition-group name="fade">
-				<v-toast
-					v-for="t in topLeftToasts"
-					:key="t.id"
-					:toast="t"
-				>
+				<v-toast v-for="t in value" :key="t.id" :toast="t">
 				</v-toast>
 			</transition-group>
-		</div>
-
-		<div class="top-right">
-			<v-toast
-				v-for="t in topRightToasts"
-				:key="t.id"
-				:toast="t"
-			>
-			</v-toast>
-		</div>
-
-		<div class="bottom-left">
-			<v-toast
-				v-for="t in bottomLeftToasts"
-				:key="t.id"
-				:toast="t"
-			>
-			</v-toast>
-		</div>
-
-		<div class="bottom-right">
-			<v-toast
-				v-for="t in bottomRightToasts"
-				:key="t.id"
-				:toast="t"
-			>
-			</v-toast>
 		</div>
 	</div>
 </template>
@@ -48,20 +17,13 @@
 		components: { VToast },
 
 		computed: {
-			topLeftToasts() {
-				return this.$toast.toasts.filter(t => t.position === 'TOP_LEFT');
-			},
-
-			topRightToasts() {
-				return this.$toast.toasts.filter(t => t.position === 'TOP_RIGHT');
-			},
-
-			bottomLeftToasts() {
-				return this.$toast.toasts.filter(t => t.position === 'BOTTOM_LEFT');
-			},
-
-			bottomRightToasts() {
-				return this.$toast.toasts.filter(t => t.position === 'BOTTOM_RIGHT');
+			toasts() {
+				return {
+					'top-left': this.$toast.toasts.filter(t => t.position === 'TOP_LEFT'),
+					'top-right': this.$toast.toasts.filter(t => t.position === 'TOP_RIGHT'),
+					'bottom-left': this.$toast.toasts.filter(t => t.position === 'BOTTOM_LEFT'),
+					'bottom-right': this.$toast.toasts.filter(t => t.position === 'BOTTOM_RIGHT')
+				};
 			}
 		}
 	};
@@ -70,35 +32,35 @@
 <style>
 	.top-left {
 		position: fixed;
-		top: 70px;
-		left: 149px;
-		z-index: 999999;
+		z-index: 99;
 	}
 
 	.top-right {
 		position: fixed;
-		top: 70px;
-		right: 0px;
-		z-index: 999999;
+		right: 30px;
+		z-index: 99;
 	}
 
 	.bottom-left {
 		position: fixed;
 		bottom: 0px;
-		left: 149px;
-		z-index: 999999;
+		z-index: 99;
 	}
 
 	.bottom-right {
 		position: fixed;
+		right: 30px;
 		bottom: 0px;
-		right: 0px;
-		z-index: 999999;
+		z-index: 99;
 	}
 
 	.fade-enter-active,
 	.fade-leave-active {
-		transition: opacity  2s, transform 1s;
+		transition: opacity  1.5s;
+	}
+
+	.fade-move {
+  		transition: transform 1s;
 	}
 
 	.fade-leave-active {
@@ -108,10 +70,5 @@
 	.fade-enter,
 	.fade-leave-to {
 		opacity: 0;
-		transform: translateX(200px);
-	}
-
-	.fade-move {
-  		transition: transform 3s;
 	}
 </style>

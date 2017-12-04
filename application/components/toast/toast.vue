@@ -1,7 +1,8 @@
 <template>
-	<div class="toast">
-		{{toast.text}}
+	<div :class="['toast', toast.class]">
 		<button type="button" class="close" @click="close">&times;</button>
+		<div v-html="toast.title" style="font-weight: bold;"></div>
+		<span v-html="toast.text"></span>
 	</div>
 </template>
 
@@ -17,10 +18,41 @@
 	};
 </script>
 
-<style>
+<style scoped>
+	.close {
+		position: absolute;
+		top: 0px;
+		right: 0px;
+		padding: 20px !important;
+		color: white;
+		outline: none;
+	}
+
 	.toast {
+		position: relative;
+		min-width: 300px;
+		min-height: 50px;
 		padding: 10px;
-		border: 1px solid #000;
-		background-color: #fff;
+		color: white;
+		margin-bottom: 10px;
+		border-radius: 5px;
+	}
+
+	.toast-success {
+		background-color: #47842ef2;
+		border: 1px solid #cbe3bb;
+		box-shadow: 5px 5px rgba(0, 0, 0, 0.15);
+	}
+
+	.toast-warning {
+		background-color: #a5a032f2;
+		border: 1px solid #af9c26;
+		box-shadow: 5px 5px rgba(0, 0, 0, 0.15);
+	}
+
+	.toast-danger {
+		background-color: #ad3530f2;
+		border: 1px solid #c37c71;
+		box-shadow: 5px 5px rgba(0, 0, 0, 0.15);
 	}
 </style>
