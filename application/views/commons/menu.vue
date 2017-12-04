@@ -111,7 +111,7 @@
 				position: absolute;
 				white-space: nowrap;
 				left: 45px;
-				z-index: 1;
+				z-index: 99;
 				padding: 2px 4px;
 				border-radius: 3px;
 				background: lighten(#5bc0de, 10);

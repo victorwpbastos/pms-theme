@@ -29,7 +29,7 @@
 	};
 </script>
 
-<style>
+<style scoped>
 	.top-left {
 		position: fixed;
 		z-index: 99;
@@ -56,7 +56,7 @@
 
 	.fade-enter-active,
 	.fade-leave-active {
-		transition: opacity  1.5s;
+		transition: opacity 1.5s;
 	}
 
 	.fade-move {
@@ -64,7 +64,7 @@
 	}
 
 	.fade-leave-active {
-		position: absolute;
+		position: absolute !important;
 	}
 
 	.fade-enter,
