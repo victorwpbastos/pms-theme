@@ -1,8 +1,10 @@
 <template>
 	<div id="application-container" class="flex">
 		<template v-if="loading">
-			<div style="margin:auto;">
-				<span class="fa fa-cog fa-spin"></span> Inicializando aplicação
+			<div style="text-align:center;margin:auto;">
+				<img src="../../../assets/img/brasao.png">
+				<br>
+				Inicializando aplicação
 			</div>
 		</template>
 
@@ -44,7 +46,7 @@
 	import PermisysModel from 'models/permisys';
 
 	export default {
-		components: { VHeader, VMenu, VFooter, VLogin, VErrorMessage, VToasts },
+		components: { VHeader, VMenu, VFooter, VLogin, VToasts, VErrorMessage },
 
 		data() {
 			return {
@@ -163,5 +165,20 @@
 	.fade-enter,
 	.fade-leave-to {
 		opacity: 0;
+	}
+
+	@keyframes fade {
+		0%, 100% {
+			opacity: 1;
+		}
+
+		50% {
+			opacity: 0.3;
+		}
+	}
+
+	img {
+		filter: opacity(70%);
+		animation: fade 1.5s ease-in-out infinite;
 	}
 </style>
