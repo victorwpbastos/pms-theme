@@ -108,7 +108,7 @@ export default class Model {
 
 				created() {
 					this.unwatch = this.$watch('$data', () => {
-						this.$options.validations.call(this);
+						this.$options.validations();
 						self.$v = this.$v;
 					}, { deep: true });
 				},
@@ -117,7 +117,9 @@ export default class Model {
 					this.unwatch();
 				},
 
-				validations: self.validations
+				validations() {
+					return self.validations.apply(self, arguments);
+				}
 			});
 
 			this.$v = fakeView.$v;
