@@ -1,7 +1,21 @@
 <template>
 	<div class="box">
+		<!-- ERROR MESSAGE -->
+		<h3 class="thin" style="margin-bottom: 15px;">Error Message</h3>
+
+		<div class="row">
+			<div class="col-md-10">
+				<input type="text" class="form-control" v-model="errorMessage"></input>
+			</div>
+			<div class="col-md-2">
+				<button type="button" class="btn btn-danger btn-block" @click="setErrorMessage">
+					Adicionar Mensagem
+				</button>
+			</div>
+		</div>
+
 		<!-- TOAST -->
-		<h3 class="thin" style="margin-bottom: 15px;">Toasts</h3>
+		<h3 class="thin" style="margin-top: 30px; margin-bottom: 15px;">Toasts</h3>
 
 		<div class="row">
 			<div class="col-md-2">
@@ -97,7 +111,8 @@
 				toastTitle: 'Título',
 				toastText: 'Corpo do texto.',
 				toastPosition: 'BOTTOM_LEFT',
-				toastClass: 'success'
+				toastClass: 'success',
+				errorMessage: 'Mensagem de erro.'
 			};
 		},
 
@@ -122,6 +137,10 @@
 					position: this.toastPosition,
 					class: this.toastClass
 				});
+			},
+
+			setErrorMessage() {
+				this.$errorMessage.set(this.errorMessage);
 			}
 		}
 	};

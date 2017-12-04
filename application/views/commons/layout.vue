@@ -16,6 +16,7 @@
 
 				<main class="flex flex-column">
 					<v-toasts></v-toasts>
+					<v-error-message></v-error-message>
 
 					<div class="overlay" v-if="showLogin">
 						<v-login @success="handleLoginSuccess"></v-login>
@@ -39,10 +40,11 @@
 	import VFooter from 'views/commons/footer';
 	import VLogin from 'views/permisys/login';
 	import VToasts from 'components/toast';
+	import VErrorMessage from 'components/errorMessage/index';
 	import PermisysModel from 'models/permisys';
 
 	export default {
-		components: { VHeader, VMenu, VFooter, VLogin, VToasts },
+		components: { VHeader, VMenu, VFooter, VLogin, VErrorMessage, VToasts },
 
 		data() {
 			return {
