@@ -58,7 +58,7 @@
 	export default {
 		data() {
 			return {
-				model: new PermisysModel(),
+				model: new PermisysModel(true),
 
 				loading: false
 			};
@@ -90,6 +90,8 @@
 		methods: {
 			async recuperarSenha() {
 				this.model.$v.$touch();
+
+				console.log(this.model);
 
 				if (!this.model.$v.$invalid) {
 					this.loading = true;

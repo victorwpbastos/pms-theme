@@ -2,18 +2,25 @@ import BaseModel from 'models/base';
 import { required } from 'vuelidate/lib/validators';
 
 export default class Permisys extends BaseModel {
-	constructor() {
-		super(`${Config.BASE_URL}/permisys`, { usuario: '',	senha: '', email: '', hash: '', novaSenha: '' });
+	constructor(recuperandoSenha = false) {
+		super(`${Config.BASE_URL}/permisys`, { recuperandoSenha, usuario: '',	senha: '', email: '', hash: '', novaSenha: '' });
 	}
 
 	validations() {
-		return {
-			usuario: { required },
-			email: { required },
-			hash: { required },
-			senha: { required },
-			novaSenha: { required }
-		};
+		if (this._originalAttrs.recuperandoSenha) {
+			return {
+				usuario: { required },
+				email: { required },
+				hash: { required },
+				senha: { required },
+				novaSenha: { required }
+			};
+		} else {
+			return {
+				usuario: { required },
+				senha: { required }
+			};
+		}
 	}
 
 	recuperarSenha() {
