@@ -91,8 +91,6 @@
 			async recuperarSenha() {
 				this.model.$v.$touch();
 
-				console.log(this.model);
-
 				if (!this.model.$v.$invalid) {
 					this.loading = true;
 
