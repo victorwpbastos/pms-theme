@@ -41,13 +41,13 @@
 
 		watch: {
 			toggled() {
-				let appName = this.$store.pkg.name.toUpperCase().replace(/\s/g, '_');
+				let appName = '<%= appName.toUpperCase() %>'.replace(/\s/g, '_');
 				localStorage.setItem(`${appName}-menu-toggled`, this.toggled);
 			}
 		},
 
 		created() {
-			let appName = this.$store.pkg.name.toUpperCase().replace(/\s/g, '_');
+			let appName = '<%= appName.toUpperCase() %>'.replace(/\s/g, '_');
 			let value = localStorage.getItem(`${appName}-menu-toggled`);
 
 			if (value) {

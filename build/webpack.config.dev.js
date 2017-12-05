@@ -1,14 +1,30 @@
-let path = require('path');
-let webpack = require('webpack');
-let HtmlWebpackPlugin = require('html-webpack-plugin');
-let portfinder = require('portfinder');
-let FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
+// the 'require' parameter is in the context of front-cli, not the application
+module.exports = require => {
+	let path = require('path');
+	let webpack = require('webpack');
+	let HtmlWebpackPlugin = require('html-webpack-plugin');
+	let babelOptions = {
+		presets: [
+			[require.resolve('babel-preset-env'), {
+				targets: {
+					browsers: ['ie >= 11']
+				},
+				modules: false,
+				useBuiltIns: true,
+				debug: false
+			}]
+		],
+		plugins: ['syntax-dynamic-import']
+	};
 
-portfinder.basePort = 3000;
-
-module.exports = portfinder.getPortPromise().then(port => {
 	return {
-		entry: path.resolve(__dirname, '../application/main.js'),
+		entry: {
+			application: [
+				'webpack-dev-server/client?{{host}}:{{port}}',
+				'webpack/hot/only-dev-server',
+				path.resolve(__dirname, '../application/main.js')
+			]
+		},
 
 		output: {
 			path: path.resolve(__dirname, '../dist'),
@@ -23,18 +39,15 @@ module.exports = portfinder.getPortPromise().then(port => {
 					loader: 'vue-loader',
 					options: {
 						loaders: {
-							js: 'babel-loader?cacheDirectory=true',
+							js: 'babel-loader?' + JSON.stringify(babelOptions),
 							less: 'vue-style-loader!css-loader!less-loader'
 						}
 					}
 				},
 				{
 					test: /\.js$/i,
-					loader: 'babel-loader',
-					exclude: /node_modules/,
-					options: {
-						cacheDirectory: true
-					}
+					loader: 'babel-loader?' + JSON.stringify(babelOptions),
+					exclude: /node_modules/
 				},
 				{
 					test: /\.less$/i,
@@ -67,13 +80,11 @@ module.exports = portfinder.getPortPromise().then(port => {
 				path.resolve(__dirname, '../application'),
 				path.resolve(__dirname, '../node_modules')
 			],
-
 			extensions: ['.js', '.vue']
 		},
 
 		plugins: [
 			new webpack.HotModuleReplacementPlugin(),
-			new webpack.NamedModulesPlugin(),
 			new webpack.ProvidePlugin({
 				$: 'jquery',
 				jQuery: 'jquery'
@@ -93,19 +104,12 @@ module.exports = portfinder.getPortPromise().then(port => {
 				filename: 'index.html',
 				template: 'index.html',
 				favicon: 'favicon.ico'
-			}),
-			new FriendlyErrorsPlugin({
-				compilationSuccessInfo: {
-					messages: [`Your application is running here: http://localhost:${port}`]
-				}
 			})
 		],
 
-		devtool: '#cheap-module-eval-source-map',
+		devtool: '#module-eval-source-map',
 
 		devServer: {
-			host: '0.0.0.0',
-			port: port,
 			hot: true,
 			quiet: true,
 			clientLogLevel: 'error',
@@ -113,6 +117,7 @@ module.exports = portfinder.getPortPromise().then(port => {
 			disableHostCheck: true,
 
 			// uncomment the following lines to enable proxy
+
 			proxy: {
 				'/api': {
 					target: 'https://api.sorocaba.sp.gov.br/pub-consulta/api',
@@ -121,15 +126,6 @@ module.exports = portfinder.getPortPromise().then(port => {
 					logLevel: 'error'
 				}
 			}
-		},
-
-		node: {
-			setImmediate: false,
-			dgram: 'empty',
-			fs: 'empty',
-			net: 'empty',
-			tls: 'empty',
-			child_process: 'empty'
 		}
 	};
-});
+};
