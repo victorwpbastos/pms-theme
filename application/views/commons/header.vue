@@ -3,8 +3,8 @@
 		<router-link to="/" class="flex v-center">
 			<img class="m-right-10" src="../../../assets/img/brasao.png">
 			<h4 class="thin">
-				<%= appName.toUpperCase() %>
-				<span style="color:tomato;"><%= appName.toUpperCase() %></span>
+				{{ $store.pkg.name.toUpperCase() }}
+				<span style="color:tomato;">{{ $store.pkg.name.toUpperCase() }}</span>
 			</h4>
 		</router-link>
 

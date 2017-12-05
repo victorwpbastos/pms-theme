@@ -328,7 +328,7 @@
 		},
 
 		watch: {
-			page(newValue, oldValue) {
+			page() {
 				this.fetchData();
 			},
 
